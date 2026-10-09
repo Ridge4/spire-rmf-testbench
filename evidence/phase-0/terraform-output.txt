@@ -1,0 +1,13 @@
+cluster_endpoint = "https://CFA165C7CB70629DD9852CEF7ACC6199.gr7.us-east-1.eks.amazonaws.com"
+cluster_name = "spire-cluster"
+cluster_oidc_issuer = "https://oidc.eks.us-east-1.amazonaws.com/id/CFA165C7CB70629DD9852CEF7ACC6199"
+flow_log_group = "/aws/vpc/spire-cluster/flow-logs"
+jump_host_id = "i-0fd4a5bd3d6e7966b"
+kubeconfig_command = "aws eks update-kubeconfig --name spire-cluster --region us-east-1"
+oidc_provider_arn = "arn:aws:iam::<ACCOUNT_ID>:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/CFA165C7CB70629DD9852CEF7ACC6199"
+private_subnet_ids = [
+  "subnet-0326e06aace21af40",
+  "subnet-0b62977d57462e5e7",
+]
+ssm_connect_command = "aws ssm start-session --target i-0fd4a5bd3d6e7966b --region us-east-1"
+vpc_id = "vpc-0c71130dfaa11d03e"

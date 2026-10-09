@@ -1,0 +1,990 @@
+{
+    "VpcEndpoints": [
+        {
+            "VpcEndpointId": "vpce-00f8e4443d8ef21f6",
+            "VpcEndpointType": "Gateway",
+            "VpcId": "vpc-0c71130dfaa11d03e",
+            "ServiceName": "com.amazonaws.us-east-1.s3",
+            "State": "available",
+            "PolicyDocument": "{\"Version\":\"2008-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":\"*\",\"Resource\":\"*\"}]}",
+            "RouteTableIds": [
+                "rtb-0d113e1a0ebf3d606"
+            ],
+            "SubnetIds": [],
+            "Groups": [],
+            "IpAddressType": "ipv4",
+            "DnsOptions": {
+                "DnsRecordIpType": "service-defined"
+            },
+            "PrivateDnsEnabled": false,
+            "RequesterManaged": false,
+            "NetworkInterfaceIds": [],
+            "DnsEntries": [],
+            "CreationTimestamp": "2026-10-09T17:46:51+00:00",
+            "Tags": [
+                {
+                    "Key": "Project",
+                    "Value": "spire-rmf-testbench"
+                },
+                {
+                    "Key": "Owner",
+                    "Value": "spire-rmf-testbench"
+                },
+                {
+                    "Key": "Phase",
+                    "Value": "0-foundation"
+                },
+                {
+                    "Key": "Name",
+                    "Value": "spire-cluster-s3"
+                }
+            ],
+            "OwnerId": "<ACCOUNT_ID>",
+            "ServiceRegion": "us-east-1"
+        },
+        {
+            "VpcEndpointId": "vpce-0efcf30109712c501",
+            "VpcEndpointType": "Interface",
+            "VpcId": "vpc-0c71130dfaa11d03e",
+            "ServiceName": "com.amazonaws.us-east-1.ecr.dkr",
+            "State": "available",
+            "PolicyDocument": "{\n  \"Statement\": [\n    {\n      \"Action\": \"*\",\n      \"Effect\": \"Allow\",\n      \"Principal\": \"*\",\n      \"Resource\": \"*\"\n    }\n  ]\n}",
+            "RouteTableIds": [],
+            "SubnetIds": [
+                "subnet-0326e06aace21af40",
+                "subnet-0b62977d57462e5e7"
+            ],
+            "Groups": [
+                {
+                    "GroupId": "sg-0ba41a5b58196db27",
+                    "GroupName": "spire-cluster-vpce"
+                }
+            ],
+            "IpAddressType": "ipv4",
+            "DnsOptions": {
+                "DnsRecordIpType": "ipv4"
+            },
+            "PrivateDnsEnabled": true,
+            "RequesterManaged": false,
+            "NetworkInterfaceIds": [
+                "eni-05b172fb12d7d4f50",
+                "eni-051c798818682f3bc"
+            ],
+            "DnsEntries": [
+                {
+                    "DnsName": "vpce-0efcf30109712c501-aitayuws.dkr.ecr.us-east-1.vpce.amazonaws.com",
+                    "HostedZoneId": "Z7HUB22UULQXV"
+                },
+                {
+                    "DnsName": "vpce-0efcf30109712c501-aitayuws-us-east-1b.dkr.ecr.us-east-1.vpce.amazonaws.com",
+                    "HostedZoneId": "Z7HUB22UULQXV"
+                },
+                {
+                    "DnsName": "vpce-0efcf30109712c501-aitayuws-us-east-1a.dkr.ecr.us-east-1.vpce.amazonaws.com",
+                    "HostedZoneId": "Z7HUB22UULQXV"
+                },
+                {
+                    "DnsName": "dkr.ecr.us-east-1.amazonaws.com",
+                    "HostedZoneId": "Z00970223GWERNC6N8XK4"
+                },
+                {
+                    "DnsName": "*.dkr.ecr.us-east-1.amazonaws.com",
+                    "HostedZoneId": "Z00970223GWERNC6N8XK4"
+                },
+                {
+                    "DnsName": "dkr-ecr.us-east-1.on.aws",
+                    "HostedZoneId": "Z00921681GYIIXV19MO04"
+                },
+                {
+                    "DnsName": "*.dkr-ecr.us-east-1.on.aws",
+                    "HostedZoneId": "Z00921681GYIIXV19MO04"
+                }
+            ],
+            "CreationTimestamp": "2026-10-09T17:46:54.086000+00:00",
+            "Tags": [
+                {
+                    "Key": "Project",
+                    "Value": "spire-rmf-testbench"
+                },
+                {
+                    "Key": "Owner",
+                    "Value": "spire-rmf-testbench"
+                },
+                {
+                    "Key": "Phase",
+                    "Value": "0-foundation"
+                },
+                {
+                    "Key": "Name",
+                    "Value": "spire-cluster-ecr.dkr"
+                }
+            ],
+            "OwnerId": "<ACCOUNT_ID>",
+            "ServiceRegion": "us-east-1"
+        },
+        {
+            "VpcEndpointId": "vpce-03e86311993f4ec09",
+            "VpcEndpointType": "Interface",
+            "VpcId": "vpc-0c71130dfaa11d03e",
+            "ServiceName": "com.amazonaws.us-east-1.eks",
+            "State": "available",
+            "PolicyDocument": "{\n  \"Statement\": [\n    {\n      \"Action\": \"*\",\n      \"Effect\": \"Allow\",\n      \"Principal\": \"*\",\n      \"Resource\": \"*\"\n    }\n  ]\n}",
+            "RouteTableIds": [],
+            "SubnetIds": [
+                "subnet-0326e06aace21af40",
+                "subnet-0b62977d57462e5e7"
+            ],
+            "Groups": [
+                {
+                    "GroupId": "sg-0ba41a5b58196db27",
+                    "GroupName": "spire-cluster-vpce"
+                }
+            ],
+            "IpAddressType": "ipv4",
+            "DnsOptions": {
+                "DnsRecordIpType": "ipv4"
+            },
+            "PrivateDnsEnabled": true,
+            "RequesterManaged": false,
+            "NetworkInterfaceIds": [
+                "eni-028ae303071921855",
+                "eni-0088219437c0c61d2"
+            ],
+            "DnsEntries": [
+                {
+                    "DnsName": "vpce-03e86311993f4ec09-waootnt4.eks.us-east-1.vpce.amazonaws.com",
+                    "HostedZoneId": "Z7HUB22UULQXV"
+                },
+                {
+                    "DnsName": "vpce-03e86311993f4ec09-waootnt4-us-east-1b.eks.us-east-1.vpce.amazonaws.com",
+                    "HostedZoneId": "Z7HUB22UULQXV"
+                },
+                {
+                    "DnsName": "vpce-03e86311993f4ec09-waootnt4-us-east-1a.eks.us-east-1.vpce.amazonaws.com",
+                    "HostedZoneId": "Z7HUB22UULQXV"
+                },
+                {
+                    "DnsName": "eks.us-east-1.amazonaws.com",
+                    "HostedZoneId": "Z0725568394T9LWPOQXGE"
+                },
+                {
+                    "DnsName": "eks.us-east-1.api.aws",
+                    "HostedZoneId": "Z026434225RK16IIHBSRZ"
+                }
+            ],
+            "CreationTimestamp": "2026-10-09T17:46:54.093000+00:00",
+            "Tags": [
+                {
+                    "Key": "Project",
+                    "Value": "spire-rmf-testbench"
+                },
+                {
+                    "Key": "Owner",
+                    "Value": "spire-rmf-testbench"
+                },
+                {
+                    "Key": "Phase",
+                    "Value": "0-foundation"
+                },
+                {
+                    "Key": "Name",
+                    "Value": "spire-cluster-eks"
+                }
+            ],
+            "OwnerId": "<ACCOUNT_ID>",
+            "ServiceRegion": "us-east-1"
+        },
+        {
+            "VpcEndpointId": "vpce-0bdd821d77e2a152f",
+            "VpcEndpointType": "Interface",
+            "VpcId": "vpc-0c71130dfaa11d03e",
+            "ServiceName": "com.amazonaws.us-east-1.ssmmessages",
+            "State": "available",
+            "PolicyDocument": "{\n  \"Statement\": [\n    {\n      \"Action\": \"*\",\n      \"Effect\": \"Allow\",\n      \"Principal\": \"*\",\n      \"Resource\": \"*\"\n    }\n  ]\n}",
+            "RouteTableIds": [],
+            "SubnetIds": [
+                "subnet-0326e06aace21af40",
+                "subnet-0b62977d57462e5e7"
+            ],
+            "Groups": [
+                {
+                    "GroupId": "sg-0ba41a5b58196db27",
+                    "GroupName": "spire-cluster-vpce"
+                }
+            ],
+            "IpAddressType": "ipv4",
+            "DnsOptions": {
+                "DnsRecordIpType": "ipv4"
+            },
+            "PrivateDnsEnabled": true,
+            "RequesterManaged": false,
+            "NetworkInterfaceIds": [
+                "eni-0ab458da938697032",
+                "eni-0adc1a947651c24e2"
+            ],
+            "DnsEntries": [
+                {
+                    "DnsName": "vpce-0bdd821d77e2a152f-btt4ajms.ssmmessages.us-east-1.vpce.amazonaws.com",
+                    "HostedZoneId": "Z7HUB22UULQXV"
+                },
+                {
+                    "DnsName": "vpce-0bdd821d77e2a152f-btt4ajms-us-east-1b.ssmmessages.us-east-1.vpce.amazonaws.com",
+                    "HostedZoneId": "Z7HUB22UULQXV"
+                },
+                {
+                    "DnsName": "vpce-0bdd821d77e2a152f-btt4ajms-us-east-1a.ssmmessages.us-east-1.vpce.amazonaws.com",
+                    "HostedZoneId": "Z7HUB22UULQXV"
+                },
+                {
+                    "DnsName": "ssmmessages.us-east-1.amazonaws.com",
+                    "HostedZoneId": "Z00921222CMHOM5YSU2LD"
+                },
+                {
+                    "DnsName": "ssmmessages.us-east-1.api.aws",
+                    "HostedZoneId": "Z0092077233MLNCCSUPBF"
+                }
+            ],
+            "CreationTimestamp": "2026-10-09T17:46:54.207000+00:00",
+            "Tags": [
+                {
+                    "Key": "Project",
+                    "Value": "spire-rmf-testbench"
+                },
+                {
+                    "Key": "Owner",
+                    "Value": "spire-rmf-testbench"
+                },
+                {
+                    "Key": "Phase",
+                    "Value": "0-foundation"
+                },
+                {
+                    "Key": "Name",
+                    "Value": "spire-cluster-ssmmessages"
+                }
+            ],
+            "OwnerId": "<ACCOUNT_ID>",
+            "ServiceRegion": "us-east-1"
+        },
+        {
+            "VpcEndpointId": "vpce-0092a71068845f6e9",
+            "VpcEndpointType": "Interface",
+            "VpcId": "vpc-0c71130dfaa11d03e",
+            "ServiceName": "com.amazonaws.us-east-1.elasticloadbalancing",
+            "State": "available",
+            "PolicyDocument": "{\n  \"Statement\": [\n    {\n      \"Action\": \"*\",\n      \"Effect\": \"Allow\",\n      \"Principal\": \"*\",\n      \"Resource\": \"*\"\n    }\n  ]\n}",
+            "RouteTableIds": [],
+            "SubnetIds": [
+                "subnet-0326e06aace21af40",
+                "subnet-0b62977d57462e5e7"
+            ],
+            "Groups": [
+                {
+                    "GroupId": "sg-0ba41a5b58196db27",
+                    "GroupName": "spire-cluster-vpce"
+                }
+            ],
+            "IpAddressType": "ipv4",
+            "DnsOptions": {
+                "DnsRecordIpType": "ipv4"
+            },
+            "PrivateDnsEnabled": true,
+            "RequesterManaged": false,
+            "NetworkInterfaceIds": [
+                "eni-0c07483b054f2deb6",
+                "eni-09438429d1557afaf"
+            ],
+            "DnsEntries": [
+                {
+                    "DnsName": "vpce-0092a71068845f6e9-4c0ywd0e.elasticloadbalancing.us-east-1.vpce.amazonaws.com",
+                    "HostedZoneId": "Z7HUB22UULQXV"
+                },
+                {
+                    "DnsName": "vpce-0092a71068845f6e9-4c0ywd0e-us-east-1a.elasticloadbalancing.us-east-1.vpce.amazonaws.com",
+                    "HostedZoneId": "Z7HUB22UULQXV"
+                },
+                {
+                    "DnsName": "vpce-0092a71068845f6e9-4c0ywd0e-us-east-1b.elasticloadbalancing.us-east-1.vpce.amazonaws.com",
+                    "HostedZoneId": "Z7HUB22UULQXV"
+                },
+                {
+                    "DnsName": "elasticloadbalancing.us-east-1.amazonaws.com",
+                    "HostedZoneId": "Z0090193TLBAVS48D9SW"
+                },
+                {
+                    "DnsName": "elasticloadbalancing.us-east-1.api.aws",
+                    "HostedZoneId": "Z07250523HX9X3IYVLPTK"
+                }
+            ],
+            "CreationTimestamp": "2026-10-09T17:46:54.227000+00:00",
+            "Tags": [
+                {
+                    "Key": "Project",
+                    "Value": "spire-rmf-testbench"
+                },
+                {
+                    "Key": "Owner",
+                    "Value": "spire-rmf-testbench"
+                },
+                {
+                    "Key": "Phase",
+                    "Value": "0-foundation"
+                },
+                {
+                    "Key": "Name",
+                    "Value": "spire-cluster-elasticloadbalancing"
+                }
+            ],
+            "OwnerId": "<ACCOUNT_ID>",
+            "ServiceRegion": "us-east-1"
+        },
+        {
+            "VpcEndpointId": "vpce-0c8d5307cb5497a50",
+            "VpcEndpointType": "Interface",
+            "VpcId": "vpc-0c71130dfaa11d03e",
+            "ServiceName": "com.amazonaws.us-east-1.ec2messages",
+            "State": "available",
+            "PolicyDocument": "{\n  \"Statement\": [\n    {\n      \"Action\": \"*\",\n      \"Effect\": \"Allow\",\n      \"Principal\": \"*\",\n      \"Resource\": \"*\"\n    }\n  ]\n}",
+            "RouteTableIds": [],
+            "SubnetIds": [
+                "subnet-0326e06aace21af40",
+                "subnet-0b62977d57462e5e7"
+            ],
+            "Groups": [
+                {
+                    "GroupId": "sg-0ba41a5b58196db27",
+                    "GroupName": "spire-cluster-vpce"
+                }
+            ],
+            "IpAddressType": "ipv4",
+            "DnsOptions": {
+                "DnsRecordIpType": "ipv4"
+            },
+            "PrivateDnsEnabled": true,
+            "RequesterManaged": false,
+            "NetworkInterfaceIds": [
+                "eni-06ff11bba9264960b",
+                "eni-0c43528aa0e4fe73b"
+            ],
+            "DnsEntries": [
+                {
+                    "DnsName": "vpce-0c8d5307cb5497a50-iovrn2b4.ec2messages.us-east-1.vpce.amazonaws.com",
+                    "HostedZoneId": "Z7HUB22UULQXV"
+                },
+                {
+                    "DnsName": "vpce-0c8d5307cb5497a50-iovrn2b4-us-east-1a.ec2messages.us-east-1.vpce.amazonaws.com",
+                    "HostedZoneId": "Z7HUB22UULQXV"
+                },
+                {
+                    "DnsName": "vpce-0c8d5307cb5497a50-iovrn2b4-us-east-1b.ec2messages.us-east-1.vpce.amazonaws.com",
+                    "HostedZoneId": "Z7HUB22UULQXV"
+                },
+                {
+                    "DnsName": "ec2messages.us-east-1.amazonaws.com",
+                    "HostedZoneId": "Z009150012F1SWE096FQ7"
+                }
+            ],
+            "CreationTimestamp": "2026-10-09T17:46:54.228000+00:00",
+            "Tags": [
+                {
+                    "Key": "Project",
+                    "Value": "spire-rmf-testbench"
+                },
+                {
+                    "Key": "Owner",
+                    "Value": "spire-rmf-testbench"
+                },
+                {
+                    "Key": "Phase",
+                    "Value": "0-foundation"
+                },
+                {
+                    "Key": "Name",
+                    "Value": "spire-cluster-ec2messages"
+                }
+            ],
+            "OwnerId": "<ACCOUNT_ID>",
+            "ServiceRegion": "us-east-1"
+        },
+        {
+            "VpcEndpointId": "vpce-028b027ea334c5fbf",
+            "VpcEndpointType": "Interface",
+            "VpcId": "vpc-0c71130dfaa11d03e",
+            "ServiceName": "com.amazonaws.us-east-1.eks-auth",
+            "State": "available",
+            "PolicyDocument": "{\n  \"Statement\": [\n    {\n      \"Action\": \"*\",\n      \"Effect\": \"Allow\",\n      \"Principal\": \"*\",\n      \"Resource\": \"*\"\n    }\n  ]\n}",
+            "RouteTableIds": [],
+            "SubnetIds": [
+                "subnet-0326e06aace21af40",
+                "subnet-0b62977d57462e5e7"
+            ],
+            "Groups": [
+                {
+                    "GroupId": "sg-0ba41a5b58196db27",
+                    "GroupName": "spire-cluster-vpce"
+                }
+            ],
+            "IpAddressType": "ipv4",
+            "DnsOptions": {
+                "DnsRecordIpType": "ipv4"
+            },
+            "PrivateDnsEnabled": true,
+            "RequesterManaged": false,
+            "NetworkInterfaceIds": [
+                "eni-02c4de71affb70334",
+                "eni-03243705bc75a0784"
+            ],
+            "DnsEntries": [
+                {
+                    "DnsName": "vpce-028b027ea334c5fbf-hxx8eq0v.eks-auth.us-east-1.vpce.amazonaws.com",
+                    "HostedZoneId": "Z7HUB22UULQXV"
+                },
+                {
+                    "DnsName": "vpce-028b027ea334c5fbf-hxx8eq0v-us-east-1a.eks-auth.us-east-1.vpce.amazonaws.com",
+                    "HostedZoneId": "Z7HUB22UULQXV"
+                },
+                {
+                    "DnsName": "vpce-028b027ea334c5fbf-hxx8eq0v-us-east-1b.eks-auth.us-east-1.vpce.amazonaws.com",
+                    "HostedZoneId": "Z7HUB22UULQXV"
+                },
+                {
+                    "DnsName": "eks-auth.us-east-1.api.aws",
+                    "HostedZoneId": "Z00902152AW9W4YNE0MAU"
+                }
+            ],
+            "CreationTimestamp": "2026-10-09T17:46:54.352000+00:00",
+            "Tags": [
+                {
+                    "Key": "Project",
+                    "Value": "spire-rmf-testbench"
+                },
+                {
+                    "Key": "Owner",
+                    "Value": "spire-rmf-testbench"
+                },
+                {
+                    "Key": "Phase",
+                    "Value": "0-foundation"
+                },
+                {
+                    "Key": "Name",
+                    "Value": "spire-cluster-eks-auth"
+                }
+            ],
+            "OwnerId": "<ACCOUNT_ID>",
+            "ServiceRegion": "us-east-1"
+        },
+        {
+            "VpcEndpointId": "vpce-0b89bd445726b6c9b",
+            "VpcEndpointType": "Interface",
+            "VpcId": "vpc-0c71130dfaa11d03e",
+            "ServiceName": "com.amazonaws.us-east-1.ecr.api",
+            "State": "available",
+            "PolicyDocument": "{\n  \"Statement\": [\n    {\n      \"Action\": \"*\",\n      \"Effect\": \"Allow\",\n      \"Principal\": \"*\",\n      \"Resource\": \"*\"\n    }\n  ]\n}",
+            "RouteTableIds": [],
+            "SubnetIds": [
+                "subnet-0326e06aace21af40",
+                "subnet-0b62977d57462e5e7"
+            ],
+            "Groups": [
+                {
+                    "GroupId": "sg-0ba41a5b58196db27",
+                    "GroupName": "spire-cluster-vpce"
+                }
+            ],
+            "IpAddressType": "ipv4",
+            "DnsOptions": {
+                "DnsRecordIpType": "ipv4"
+            },
+            "PrivateDnsEnabled": true,
+            "RequesterManaged": false,
+            "NetworkInterfaceIds": [
+                "eni-0faaca140b10c32e3",
+                "eni-0f24c5218f09401c1"
+            ],
+            "DnsEntries": [
+                {
+                    "DnsName": "vpce-0b89bd445726b6c9b-eh99qcwl.api.ecr.us-east-1.vpce.amazonaws.com",
+                    "HostedZoneId": "Z7HUB22UULQXV"
+                },
+                {
+                    "DnsName": "vpce-0b89bd445726b6c9b-eh99qcwl-us-east-1a.api.ecr.us-east-1.vpce.amazonaws.com",
+                    "HostedZoneId": "Z7HUB22UULQXV"
+                },
+                {
+                    "DnsName": "vpce-0b89bd445726b6c9b-eh99qcwl-us-east-1b.api.ecr.us-east-1.vpce.amazonaws.com",
+                    "HostedZoneId": "Z7HUB22UULQXV"
+                },
+                {
+                    "DnsName": "api.ecr.us-east-1.amazonaws.com",
+                    "HostedZoneId": "Z02627651RC8YB5URC3KS"
+                },
+                {
+                    "DnsName": "ecr.us-east-1.api.aws",
+                    "HostedZoneId": "Z02642293MXV1QTZ4JMI"
+                }
+            ],
+            "CreationTimestamp": "2026-10-09T17:46:54.418000+00:00",
+            "Tags": [
+                {
+                    "Key": "Project",
+                    "Value": "spire-rmf-testbench"
+                },
+                {
+                    "Key": "Owner",
+                    "Value": "spire-rmf-testbench"
+                },
+                {
+                    "Key": "Phase",
+                    "Value": "0-foundation"
+                },
+                {
+                    "Key": "Name",
+                    "Value": "spire-cluster-ecr.api"
+                }
+            ],
+            "OwnerId": "<ACCOUNT_ID>",
+            "ServiceRegion": "us-east-1"
+        },
+        {
+            "VpcEndpointId": "vpce-066f54e579673fd4a",
+            "VpcEndpointType": "Interface",
+            "VpcId": "vpc-0c71130dfaa11d03e",
+            "ServiceName": "com.amazonaws.us-east-1.logs",
+            "State": "available",
+            "PolicyDocument": "{\n  \"Statement\": [\n    {\n      \"Action\": \"*\",\n      \"Effect\": \"Allow\",\n      \"Principal\": \"*\",\n      \"Resource\": \"*\"\n    }\n  ]\n}",
+            "RouteTableIds": [],
+            "SubnetIds": [
+                "subnet-0326e06aace21af40",
+                "subnet-0b62977d57462e5e7"
+            ],
+            "Groups": [
+                {
+                    "GroupId": "sg-0ba41a5b58196db27",
+                    "GroupName": "spire-cluster-vpce"
+                }
+            ],
+            "IpAddressType": "ipv4",
+            "DnsOptions": {
+                "DnsRecordIpType": "ipv4"
+            },
+            "PrivateDnsEnabled": true,
+            "RequesterManaged": false,
+            "NetworkInterfaceIds": [
+                "eni-0c2c2f887643e935c",
+                "eni-03a6fe87c2af60cff"
+            ],
+            "DnsEntries": [
+                {
+                    "DnsName": "vpce-066f54e579673fd4a-ksrfrq86.logs.us-east-1.vpce.amazonaws.com",
+                    "HostedZoneId": "Z7HUB22UULQXV"
+                },
+                {
+                    "DnsName": "vpce-066f54e579673fd4a-ksrfrq86-us-east-1b.logs.us-east-1.vpce.amazonaws.com",
+                    "HostedZoneId": "Z7HUB22UULQXV"
+                },
+                {
+                    "DnsName": "vpce-066f54e579673fd4a-ksrfrq86-us-east-1a.logs.us-east-1.vpce.amazonaws.com",
+                    "HostedZoneId": "Z7HUB22UULQXV"
+                },
+                {
+                    "DnsName": "logs.us-east-1.amazonaws.com",
+                    "HostedZoneId": "Z0091299GHBGNU8GT1XD"
+                },
+                {
+                    "DnsName": "streaming-logs.us-east-1.amazonaws.com",
+                    "HostedZoneId": "Z02642026MRR57J6Q00U"
+                },
+                {
+                    "DnsName": "streaming-logs.us-east-1.api.aws",
+                    "HostedZoneId": "Z009131736O1HS07V3PX8"
+                },
+                {
+                    "DnsName": "logs.us-east-1.api.aws",
+                    "HostedZoneId": "Z009687737GKAOX0YQTFV"
+                }
+            ],
+            "CreationTimestamp": "2026-10-09T17:47:10.444000+00:00",
+            "Tags": [
+                {
+                    "Key": "Project",
+                    "Value": "spire-rmf-testbench"
+                },
+                {
+                    "Key": "Owner",
+                    "Value": "spire-rmf-testbench"
+                },
+                {
+                    "Key": "Phase",
+                    "Value": "0-foundation"
+                },
+                {
+                    "Key": "Name",
+                    "Value": "spire-cluster-logs"
+                }
+            ],
+            "OwnerId": "<ACCOUNT_ID>",
+            "ServiceRegion": "us-east-1"
+        },
+        {
+            "VpcEndpointId": "vpce-0fea0018195587679",
+            "VpcEndpointType": "Interface",
+            "VpcId": "vpc-0c71130dfaa11d03e",
+            "ServiceName": "com.amazonaws.us-east-1.kms",
+            "State": "available",
+            "PolicyDocument": "{\n  \"Statement\": [\n    {\n      \"Action\": \"*\",\n      \"Effect\": \"Allow\",\n      \"Principal\": \"*\",\n      \"Resource\": \"*\"\n    }\n  ]\n}",
+            "RouteTableIds": [],
+            "SubnetIds": [
+                "subnet-0326e06aace21af40",
+                "subnet-0b62977d57462e5e7"
+            ],
+            "Groups": [
+                {
+                    "GroupId": "sg-0ba41a5b58196db27",
+                    "GroupName": "spire-cluster-vpce"
+                }
+            ],
+            "IpAddressType": "ipv4",
+            "DnsOptions": {
+                "DnsRecordIpType": "ipv4"
+            },
+            "PrivateDnsEnabled": true,
+            "RequesterManaged": false,
+            "NetworkInterfaceIds": [
+                "eni-06c441ea4ed8dfb0d",
+                "eni-083a91aa00ddda68f"
+            ],
+            "DnsEntries": [
+                {
+                    "DnsName": "vpce-0fea0018195587679-j0b1wpx0.kms.us-east-1.vpce.amazonaws.com",
+                    "HostedZoneId": "Z7HUB22UULQXV"
+                },
+                {
+                    "DnsName": "vpce-0fea0018195587679-j0b1wpx0-us-east-1a.kms.us-east-1.vpce.amazonaws.com",
+                    "HostedZoneId": "Z7HUB22UULQXV"
+                },
+                {
+                    "DnsName": "vpce-0fea0018195587679-j0b1wpx0-us-east-1b.kms.us-east-1.vpce.amazonaws.com",
+                    "HostedZoneId": "Z7HUB22UULQXV"
+                },
+                {
+                    "DnsName": "kms.us-east-1.amazonaws.com",
+                    "HostedZoneId": "Z0096189AGMYBP529YGC"
+                },
+                {
+                    "DnsName": "kms.us-east-1.api.aws",
+                    "HostedZoneId": "Z0262267AQ0RT7N1WZC9"
+                }
+            ],
+            "CreationTimestamp": "2026-10-09T17:47:14.830000+00:00",
+            "Tags": [
+                {
+                    "Key": "Project",
+                    "Value": "spire-rmf-testbench"
+                },
+                {
+                    "Key": "Owner",
+                    "Value": "spire-rmf-testbench"
+                },
+                {
+                    "Key": "Phase",
+                    "Value": "0-foundation"
+                },
+                {
+                    "Key": "Name",
+                    "Value": "spire-cluster-kms"
+                }
+            ],
+            "OwnerId": "<ACCOUNT_ID>",
+            "ServiceRegion": "us-east-1"
+        },
+        {
+            "VpcEndpointId": "vpce-0c94ae99f8c1710ef",
+            "VpcEndpointType": "Interface",
+            "VpcId": "vpc-0c71130dfaa11d03e",
+            "ServiceName": "com.amazonaws.us-east-1.ec2",
+            "State": "available",
+            "PolicyDocument": "{\n  \"Statement\": [\n    {\n      \"Action\": \"*\",\n      \"Effect\": \"Allow\",\n      \"Principal\": \"*\",\n      \"Resource\": \"*\"\n    }\n  ]\n}",
+            "RouteTableIds": [],
+            "SubnetIds": [
+                "subnet-0326e06aace21af40",
+                "subnet-0b62977d57462e5e7"
+            ],
+            "Groups": [
+                {
+                    "GroupId": "sg-0ba41a5b58196db27",
+                    "GroupName": "spire-cluster-vpce"
+                }
+            ],
+            "IpAddressType": "ipv4",
+            "DnsOptions": {
+                "DnsRecordIpType": "ipv4"
+            },
+            "PrivateDnsEnabled": true,
+            "RequesterManaged": false,
+            "NetworkInterfaceIds": [
+                "eni-0c6981af0576943d3",
+                "eni-09dbb91c94449956b"
+            ],
+            "DnsEntries": [
+                {
+                    "DnsName": "vpce-0c94ae99f8c1710ef-q9t8zbhv.ec2.us-east-1.vpce.amazonaws.com",
+                    "HostedZoneId": "Z7HUB22UULQXV"
+                },
+                {
+                    "DnsName": "vpce-0c94ae99f8c1710ef-q9t8zbhv-us-east-1a.ec2.us-east-1.vpce.amazonaws.com",
+                    "HostedZoneId": "Z7HUB22UULQXV"
+                },
+                {
+                    "DnsName": "vpce-0c94ae99f8c1710ef-q9t8zbhv-us-east-1b.ec2.us-east-1.vpce.amazonaws.com",
+                    "HostedZoneId": "Z7HUB22UULQXV"
+                },
+                {
+                    "DnsName": "ec2.us-east-1.amazonaws.com",
+                    "HostedZoneId": "Z046059514S1ZN3TLP1BT"
+                },
+                {
+                    "DnsName": "ec2.us-east-1.api.aws",
+                    "HostedZoneId": "Z04605942YWKUDET4S5IL"
+                }
+            ],
+            "CreationTimestamp": "2026-10-09T17:47:17.462000+00:00",
+            "Tags": [
+                {
+                    "Key": "Project",
+                    "Value": "spire-rmf-testbench"
+                },
+                {
+                    "Key": "Owner",
+                    "Value": "spire-rmf-testbench"
+                },
+                {
+                    "Key": "Phase",
+                    "Value": "0-foundation"
+                },
+                {
+                    "Key": "Name",
+                    "Value": "spire-cluster-ec2"
+                }
+            ],
+            "OwnerId": "<ACCOUNT_ID>",
+            "ServiceRegion": "us-east-1"
+        },
+        {
+            "VpcEndpointId": "vpce-024f01962fa30c849",
+            "VpcEndpointType": "Interface",
+            "VpcId": "vpc-0c71130dfaa11d03e",
+            "ServiceName": "com.amazonaws.us-east-1.sts",
+            "State": "available",
+            "PolicyDocument": "{\n  \"Statement\": [\n    {\n      \"Action\": \"*\",\n      \"Effect\": \"Allow\",\n      \"Principal\": \"*\",\n      \"Resource\": \"*\"\n    }\n  ]\n}",
+            "RouteTableIds": [],
+            "SubnetIds": [
+                "subnet-0326e06aace21af40",
+                "subnet-0b62977d57462e5e7"
+            ],
+            "Groups": [
+                {
+                    "GroupId": "sg-0ba41a5b58196db27",
+                    "GroupName": "spire-cluster-vpce"
+                }
+            ],
+            "IpAddressType": "ipv4",
+            "DnsOptions": {
+                "DnsRecordIpType": "ipv4"
+            },
+            "PrivateDnsEnabled": true,
+            "RequesterManaged": false,
+            "NetworkInterfaceIds": [
+                "eni-075ee21202a29aa0d",
+                "eni-0bb0aa037f26ca295"
+            ],
+            "DnsEntries": [
+                {
+                    "DnsName": "vpce-024f01962fa30c849-wkqchcy6.sts.us-east-1.vpce.amazonaws.com",
+                    "HostedZoneId": "Z7HUB22UULQXV"
+                },
+                {
+                    "DnsName": "vpce-024f01962fa30c849-wkqchcy6-us-east-1b.sts.us-east-1.vpce.amazonaws.com",
+                    "HostedZoneId": "Z7HUB22UULQXV"
+                },
+                {
+                    "DnsName": "vpce-024f01962fa30c849-wkqchcy6-us-east-1a.sts.us-east-1.vpce.amazonaws.com",
+                    "HostedZoneId": "Z7HUB22UULQXV"
+                },
+                {
+                    "DnsName": "sts.us-east-1.amazonaws.com",
+                    "HostedZoneId": "Z026560935WBQA12QW1JG"
+                },
+                {
+                    "DnsName": "sts.us-east-1.api.aws",
+                    "HostedZoneId": "Z026439716ZAUMAJK95ND"
+                }
+            ],
+            "CreationTimestamp": "2026-10-09T17:47:23.312000+00:00",
+            "Tags": [
+                {
+                    "Key": "Project",
+                    "Value": "spire-rmf-testbench"
+                },
+                {
+                    "Key": "Owner",
+                    "Value": "spire-rmf-testbench"
+                },
+                {
+                    "Key": "Phase",
+                    "Value": "0-foundation"
+                },
+                {
+                    "Key": "Name",
+                    "Value": "spire-cluster-sts"
+                }
+            ],
+            "OwnerId": "<ACCOUNT_ID>",
+            "ServiceRegion": "us-east-1"
+        },
+        {
+            "VpcEndpointId": "vpce-0f7354ddf0392f85d",
+            "VpcEndpointType": "Interface",
+            "VpcId": "vpc-0c71130dfaa11d03e",
+            "ServiceName": "com.amazonaws.us-east-1.ssm",
+            "State": "available",
+            "PolicyDocument": "{\n  \"Statement\": [\n    {\n      \"Action\": \"*\",\n      \"Effect\": \"Allow\",\n      \"Principal\": \"*\",\n      \"Resource\": \"*\"\n    }\n  ]\n}",
+            "RouteTableIds": [],
+            "SubnetIds": [
+                "subnet-0326e06aace21af40",
+                "subnet-0b62977d57462e5e7"
+            ],
+            "Groups": [
+                {
+                    "GroupId": "sg-0ba41a5b58196db27",
+                    "GroupName": "spire-cluster-vpce"
+                }
+            ],
+            "IpAddressType": "ipv4",
+            "DnsOptions": {
+                "DnsRecordIpType": "ipv4"
+            },
+            "PrivateDnsEnabled": true,
+            "RequesterManaged": false,
+            "NetworkInterfaceIds": [
+                "eni-0697f869955177198",
+                "eni-0eaac82ad1e3ed8bc"
+            ],
+            "DnsEntries": [
+                {
+                    "DnsName": "vpce-0f7354ddf0392f85d-0q53042t.ssm.us-east-1.vpce.amazonaws.com",
+                    "HostedZoneId": "Z7HUB22UULQXV"
+                },
+                {
+                    "DnsName": "vpce-0f7354ddf0392f85d-0q53042t-us-east-1a.ssm.us-east-1.vpce.amazonaws.com",
+                    "HostedZoneId": "Z7HUB22UULQXV"
+                },
+                {
+                    "DnsName": "vpce-0f7354ddf0392f85d-0q53042t-us-east-1b.ssm.us-east-1.vpce.amazonaws.com",
+                    "HostedZoneId": "Z7HUB22UULQXV"
+                },
+                {
+                    "DnsName": "ssm.us-east-1.amazonaws.com",
+                    "HostedZoneId": "Z00972621ZSVD3RA63VQV"
+                },
+                {
+                    "DnsName": "ssm.us-east-1.api.aws",
+                    "HostedZoneId": "Z0098086JSB4UUBTXL1I"
+                }
+            ],
+            "CreationTimestamp": "2026-10-09T17:47:27.568000+00:00",
+            "Tags": [
+                {
+                    "Key": "Project",
+                    "Value": "spire-rmf-testbench"
+                },
+                {
+                    "Key": "Owner",
+                    "Value": "spire-rmf-testbench"
+                },
+                {
+                    "Key": "Phase",
+                    "Value": "0-foundation"
+                },
+                {
+                    "Key": "Name",
+                    "Value": "spire-cluster-ssm"
+                }
+            ],
+            "OwnerId": "<ACCOUNT_ID>",
+            "ServiceRegion": "us-east-1"
+        },
+        {
+            "VpcEndpointId": "vpce-0f79c9d1674c102e6",
+            "VpcEndpointType": "Interface",
+            "VpcId": "vpc-0c71130dfaa11d03e",
+            "ServiceName": "com.amazonaws.us-east-1.autoscaling",
+            "State": "available",
+            "PolicyDocument": "{\n  \"Statement\": [\n    {\n      \"Action\": \"*\",\n      \"Effect\": \"Allow\",\n      \"Principal\": \"*\",\n      \"Resource\": \"*\"\n    }\n  ]\n}",
+            "RouteTableIds": [],
+            "SubnetIds": [
+                "subnet-0326e06aace21af40",
+                "subnet-0b62977d57462e5e7"
+            ],
+            "Groups": [
+                {
+                    "GroupId": "sg-0ba41a5b58196db27",
+                    "GroupName": "spire-cluster-vpce"
+                }
+            ],
+            "IpAddressType": "ipv4",
+            "DnsOptions": {
+                "DnsRecordIpType": "ipv4"
+            },
+            "PrivateDnsEnabled": true,
+            "RequesterManaged": false,
+            "NetworkInterfaceIds": [
+                "eni-01773eeb8ab5322a7",
+                "eni-08c129d4bfa02eccc"
+            ],
+            "DnsEntries": [
+                {
+                    "DnsName": "vpce-0f79c9d1674c102e6-xzmhp9ax.autoscaling.us-east-1.vpce.amazonaws.com",
+                    "HostedZoneId": "Z7HUB22UULQXV"
+                },
+                {
+                    "DnsName": "vpce-0f79c9d1674c102e6-xzmhp9ax-us-east-1a.autoscaling.us-east-1.vpce.amazonaws.com",
+                    "HostedZoneId": "Z7HUB22UULQXV"
+                },
+                {
+                    "DnsName": "vpce-0f79c9d1674c102e6-xzmhp9ax-us-east-1b.autoscaling.us-east-1.vpce.amazonaws.com",
+                    "HostedZoneId": "Z7HUB22UULQXV"
+                },
+                {
+                    "DnsName": "autoscaling.us-east-1.amazonaws.com",
+                    "HostedZoneId": "Z072654324OMKS145ATP9"
+                },
+                {
+                    "DnsName": "autoscaling.us-east-1.api.aws",
+                    "HostedZoneId": "Z00929013TUNFHG92SRMH"
+                }
+            ],
+            "CreationTimestamp": "2026-10-09T17:47:27.719000+00:00",
+            "Tags": [
+                {
+                    "Key": "Project",
+                    "Value": "spire-rmf-testbench"
+                },
+                {
+                    "Key": "Owner",
+                    "Value": "spire-rmf-testbench"
+                },
+                {
+                    "Key": "Phase",
+                    "Value": "0-foundation"
+                },
+                {
+                    "Key": "Name",
+                    "Value": "spire-cluster-autoscaling"
+                }
+            ],
+            "OwnerId": "<ACCOUNT_ID>",
+            "ServiceRegion": "us-east-1"
+        }
+    ]
+}

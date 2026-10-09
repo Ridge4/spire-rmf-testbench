@@ -7,7 +7,6 @@
 *.tfplan
 tf.plan
 crash.log
-.terraform.lock.hcl
 
 # Credentials / kubeconfig — never commit
 kubeconfig*

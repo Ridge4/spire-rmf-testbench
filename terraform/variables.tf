@@ -70,3 +70,41 @@ variable "owner_tag" {
   type        = string
   default     = "spire-rmf-testbench"
 }
+
+# ---------------------------------------------------------------------------
+# Phase 1
+# ---------------------------------------------------------------------------
+
+variable "rds_engine_version" {
+  description = "PostgreSQL major version. Verify it is still a supported RDS version before applying."
+  type        = string
+  default     = "16"
+}
+
+variable "rds_instance_class" {
+  description = "RDS instance class. db.t4g.micro is adequate for a testbench."
+  type        = string
+  default     = "db.t4g.micro"
+}
+
+variable "rds_multi_az" {
+  description = <<-EOT
+    Run the datastore Multi-AZ. Roughly doubles cost, so the default is false
+    for routine work. Set true for the evidence run: the availability claim in
+    the paper is only defensible with a standby in a second AZ.
+  EOT
+  type        = bool
+  default     = false
+}
+
+variable "spire_namespace" {
+  description = "Namespace the SPIRE server runs in."
+  type        = string
+  default     = "spire-server"
+}
+
+variable "spire_server_service_account" {
+  description = "Service account name for the SPIRE server. Confirm against the chart before applying."
+  type        = string
+  default     = "spire-server"
+}

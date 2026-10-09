@@ -1,0 +1,75 @@
+# SPIRE values, Phase 1
+#
+# Closes IA-5 (enforced TTL), SC-12 (KMS-held key material), and the datastore
+# single point of failure.
+#
+# VERIFY BEFORE APPLYING. Value names in the hardened chart move between
+# versions. Check yours and reconcile any differences:
+#
+#   helm repo add spiffe https://spiffe.github.io/helm-charts-hardened/
+#   helm repo update
+#   helm show values spiffe/spire > /tmp/spire-defaults.yaml
+#   grep -n -A12 "keyManager:"  /tmp/spire-defaults.yaml
+#   grep -n -A20 "dataStore:"   /tmp/spire-defaults.yaml
+#   grep -n -iE "ttl"           /tmp/spire-defaults.yaml
+#
+# Record the chart version you used; the paper needs it for reproducibility.
+
+global:
+  spire:
+    clusterName: spire-cluster
+    trustDomain: spire-rmf.lab           # not example.org this time
+    jwtIssuer: https://spire-rmf.lab
+
+spire-server:
+  # --- IA-5: lifetime restrictions set by configuration, not observed ---------
+  #
+  # The practicum's evidence was a single certificate that happened to last ~4
+  # hours. That shows an outcome, not an enforced policy. These three settings
+  # are the artifact an assessor actually needs; export the rendered config and
+  # cite it alongside an issued SVID.
+  caTTL: 24h                              # signing CA lifetime
+  defaultX509SvidTTL: 1h                  # workload X.509 SVID lifetime
+  defaultJwtSvidTTL: 5m                   # workload JWT SVID lifetime
+
+  # --- SC-12: private key material lives in KMS ------------------------------
+  keyManager:
+    disk:
+      enabled: false                      # was the practicum's posture
+    awsKMS:
+      enabled: true
+      region: us-east-1
+      # The plugin creates and manages its own keys. Credentials come from the
+      # Pod Identity association in terraform/kms.tf; leave accessKeyID and
+      # secretAccessKey unset so the SDK uses the pod's role.
+
+  # --- Datastore: external PostgreSQL instead of bundled SQLite --------------
+  dataStore:
+    sql:
+      databaseType: postgres
+      databaseName: spire
+      # host/port come from `terraform output spire_datastore_endpoint`
+      host: REPLACE_WITH_RDS_ENDPOINT
+      port: 5432
+      username: spire
+      # Password is supplied by the Kubernetes secret created in
+      # docs/phase-1-notes.md, not written here.
+      externalSecret:
+        enabled: true
+        name: spire-datastore
+        key: password
+
+  # Two replicas are only meaningful with an external datastore; SQLite could
+  # not support them. Keep at 1 unless you are capturing availability evidence.
+  replicaCount: 1
+
+  # Telemetry groundwork for Phase 4.
+  logLevel: info
+
+spire-agent:
+  logLevel: info
+
+# Installed but unused until Phase 2, where ClusterSPIFFEID resources replace
+# manual registration entries.
+spire-server-controller-manager:
+  enabled: true

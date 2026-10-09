@@ -1,0 +1,8 @@
+=== internet gateways ===
+{
+    "InternetGateways": []
+}
+=== nat gateways ===
+{
+    "NatGateways": []
+}

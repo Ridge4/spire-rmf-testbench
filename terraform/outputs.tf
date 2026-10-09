@@ -47,3 +47,18 @@ output "flow_log_group" {
   description = "VPC flow log group; evidence that no traffic left the enclave."
   value       = aws_cloudwatch_log_group.flow_logs.name
 }
+
+output "spire_datastore_endpoint" {
+  description = "RDS endpoint for the SPIRE datastore."
+  value       = aws_db_instance.spire.address
+}
+
+output "spire_datastore_secret_arn" {
+  description = "Secrets Manager ARN holding the datastore credentials."
+  value       = aws_secretsmanager_secret.db.arn
+}
+
+output "spire_server_role_arn" {
+  description = "IAM role assumed by the SPIRE server via Pod Identity."
+  value       = aws_iam_role.spire_server.arn
+}

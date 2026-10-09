@@ -1,0 +1,9 @@
+NAMESPACE     NAME                           READY   STATUS    RESTARTS   AGE
+kube-system   aws-node-72s24                 2/2     Running   0          13m
+kube-system   aws-node-c6czs                 2/2     Running   0          13m
+kube-system   coredns-cb577bcf4-ckh46        1/1     Running   0          13m
+kube-system   coredns-cb577bcf4-d9f6t        1/1     Running   0          13m
+kube-system   eks-pod-identity-agent-2nhsw   1/1     Running   0          13m
+kube-system   eks-pod-identity-agent-mz7j8   1/1     Running   0          13m
+kube-system   kube-proxy-j2q5p               1/1     Running   0          13m
+kube-system   kube-proxy-qlvf9               1/1     Running   0          13m
