@@ -1,1 +1,77 @@
+# spire-rmf-testbench
 
+A reproducible SPIFFE/SPIRE testbench on Amazon EKS, built to generate the
+evidence artifacts a federal assessor would need to validate ephemeral workload
+identity against NIST SP 800-53 controls.
+
+This repository is the rebuild supporting an extended version of the practicum
+report *Ephemeral Workload Identity Under the Federal Risk Management
+Framework*. The original testbench demonstrated SVID issuance; this one is built
+to close the evidence gaps that report identified.
+
+## Phases
+
+| Phase | Goal | Controls addressed | Status |
+|---|---|---|---|
+| 0 | Private Only VPC and EKS foundation, compliant DNS | boundary / emulation fidelity | in progress |
+| 1 | HA datastore (RDS), KMS-backed keys, enforced TTL | IA-5, SC-12 | planned |
+| 2 | Purpose-built namespaces, Controller Manager registration | AC-3, AC-6 | planned |
+| 3 | Live mTLS handshake between two workloads | SC-8 | planned |
+| 4 | Telemetry: issuance, failed attestation, retention | AU-2, AU-3, AU-9 | planned |
+| 5 | FIPS 140-validated crypto investigation | SC-13 | planned |
+
+## Layout
+
+```
+terraform/   infrastructure (Phase 0 onward)
+helm/        SPIRE values files, per phase
+manifests/   ClusterSPIFFEID resources and test workloads
+evidence/    captured artifacts, organized by phase
+docs/        build notes and findings
+```
+
+`evidence/` is the point of the repository. Each phase deposits the logs and
+configuration that the paper cites, so a reviewer can trace every claim back to
+an artifact.
+
+## Phase 0 quickstart
+
+Prerequisites: Terraform >= 1.6, AWS CLI v2 with credentials, and the Session
+Manager plugin.
+
+```bash
+cd terraform
+terraform init
+terraform plan -out tf.plan     # review before applying
+terraform apply tf.plan
+```
+
+Run Terraform **from your workstation**, not from the in-VPC jump host. See
+`docs/phase-0-dns.md` for why that matters; it is the compliant replacement for
+the public-resolver workaround used in the original build.
+
+Connect to the jump host:
+
+```bash
+aws ssm start-session --target $(terraform output -raw jump_host_id)
+```
+
+Tear down when not actively working. EKS bills for the control plane hourly:
+
+```bash
+terraform destroy
+```
+
+## Cost note
+
+A rough order of magnitude at current on-demand pricing: the EKS control plane
+and two t3.large nodes together run a few dollars per day, and the thirteen
+interface endpoints add a comparable amount since each is billed hourly per
+availability zone. Set an AWS Budgets alarm before the first apply and destroy
+between sessions. Confirm current pricing yourself; these are not quotes.
+
+## What this is not
+
+A production reference architecture. FIPS validation, multi-cluster federation,
+and a hardened SPIRE control plane are out of scope until the phases above say
+otherwise. Limitations are tracked in `docs/`.

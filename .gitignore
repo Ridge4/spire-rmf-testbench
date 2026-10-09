@@ -1,0 +1,18 @@
+# Terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+*.tfplan
+tf.plan
+crash.log
+.terraform.lock.hcl
+
+# Credentials / kubeconfig — never commit
+kubeconfig*
+*.pem
+*.key
+
+# OS
+.DS_Store

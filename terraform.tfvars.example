@@ -1,0 +1,10 @@
+# Copy to terraform.tfvars and adjust. terraform.tfvars is gitignored.
+
+region             = "us-east-1"
+cluster_name       = "spire-cluster"
+kubernetes_version = "1.33"
+
+# Set false once you confirm Pod Identity covers your IAM needs.
+create_oidc_provider = true
+
+owner_tag = "your-name"
