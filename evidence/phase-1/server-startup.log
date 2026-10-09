@@ -1,0 +1,27 @@
+time="2026-10-09T20:16:48.814832721Z" level=warning msg="Current umask 0022 is too permissive; setting umask 0027"
+time="2026-10-09T20:16:48.816316568Z" level=info msg=Configured admin_ids="[]" data_dir=/run/spire/data launch_log_level=info version=1.15.3
+time="2026-10-09T20:16:48.817200774Z" level=info msg="Opening SQL database" db_type=postgres subsystem_name=sql
+time="2026-10-09T20:16:48.857876336Z" level=info msg="Connected to SQL database" read_only=false subsystem_name=sql type=postgres version=16.13
+time="2026-10-09T20:16:48.858962598Z" level=info msg="Configured DataStore" reconfigurable=false subsystem_name=catalog
+time="2026-10-09T20:16:48.862370254Z" level=info msg="Configured plugin" external=false plugin_name=k8s_configmap plugin_type=BundlePublisher reconfigurable=false subsystem_name=catalog
+time="2026-10-09T20:16:48.862571137Z" level=info msg="Plugin loaded" external=false plugin_name=k8s_configmap plugin_type=BundlePublisher subsystem_name=catalog
+time="2026-10-09T20:16:48.864777757Z" level=warning msg="Alias-based key discovery will be deprecated in a future version and removed in a later one. Enable 'enable_tag_based_key_discovery' to switch to tag-based discovery, which efficiently finds only the keys managed by this plugin instance." external=false plugin_name=aws_kms plugin_type=KeyManager subsystem_name=catalog
+time="2026-10-09T20:16:49.05124736Z" level=info msg="Configured plugin" external=false plugin_name=aws_kms plugin_type=KeyManager reconfigurable=false subsystem_name=catalog
+time="2026-10-09T20:16:49.051549715Z" level=info msg="Plugin loaded" external=false plugin_name=aws_kms plugin_type=KeyManager subsystem_name=catalog
+time="2026-10-09T20:16:49.055466729Z" level=info msg="Configured plugin" external=false plugin_name=k8s_psat plugin_type=NodeAttestor reconfigurable=false subsystem_name=catalog
+time="2026-10-09T20:16:49.055737271Z" level=info msg="Plugin loaded" external=false plugin_name=k8s_psat plugin_type=NodeAttestor subsystem_name=catalog
+time="2026-10-09T20:16:49.077559148Z" level=info msg="There is not a CA journal record that matches any of the local X509 authority IDs" subsystem_name=ca_manager
+time="2026-10-09T20:16:49.077665266Z" level=info msg="Journal loaded" jwt_keys=0 subsystem_name=ca_manager wit_keys=0 x509_cas=0
+time="2026-10-09T20:16:49.322897758Z" level=info msg="X509 CA prepared" expiration="2026-10-10 20:16:49 +0000 UTC" issued_at="2026-10-09 20:16:49.079085249 +0000 UTC" local_authority_id=e9dbd9fb6db881144b99fe18204d442f9b98aaf0 self_signed=true slot=A subsystem_name=ca_manager upstream_authority_id=
+time="2026-10-09T20:16:49.32304799Z" level=info msg="X509 CA activated" expiration="2026-10-10 20:16:49 +0000 UTC" issued_at="2026-10-09 20:16:49.079085249 +0000 UTC" local_authority_id=e9dbd9fb6db881144b99fe18204d442f9b98aaf0 slot=A subsystem_name=ca_manager upstream_authority_id=
+time="2026-10-09T20:16:49.323153147Z" level=info msg="Creating a new CA journal entry" subsystem_name=ca_manager
+time="2026-10-09T20:16:49.444729426Z" level=info msg="JWT key prepared" expiration="2026-10-10 20:16:49.325866736 +0000 UTC" issued_at="2026-10-09 20:16:49.325866736 +0000 UTC" local_authority_id=SWdF9vU3WsHAAzLr6zHvUfMRdbjHazij slot=A subsystem_name=ca_manager
+time="2026-10-09T20:16:49.444777099Z" level=info msg="JWT key activated" expiration="2026-10-10 20:16:49.325866736 +0000 UTC" issued_at="2026-10-09 20:16:49.325866736 +0000 UTC" local_authority_id=SWdF9vU3WsHAAzLr6zHvUfMRdbjHazij slot=A subsystem_name=ca_manager
+time="2026-10-09T20:16:49.68803961Z" level=info msg="Building in-memory entry cache" subsystem_name=endpoints
+time="2026-10-09T20:16:49.690888195Z" level=info msg="Completed building in-memory entry cache" subsystem_name=endpoints
+time="2026-10-09T20:16:49.690945824Z" level=info msg="Logger service configured" launch_log_level=info
+time="2026-10-09T20:16:49.691821789Z" level=info msg="Starting Server APIs" address="[::]:8081" network=tcp subsystem_name=endpoints
+time="2026-10-09T20:16:49.691825906Z" level=info msg="Starting Server APIs" address=/tmp/spire-server/private/api.sock network=unix subsystem_name=endpoints
+time="2026-10-09T20:16:49.692114364Z" level=info msg="Serving health checks" address="0.0.0.0:8080" subsystem_name=health
+time="2026-10-09T20:25:56.706466965Z" level=info msg="Agent attestation request completed" address="10.42.2.72:39708" agent_id="spiffe://spire-rmf.lab/spire/agent/k8s_psat/spire-cluster/9ba7f04f-be0a-481d-9f2f-3a6fb7619249" authorized_as=nobody authorized_via= caller_addr="10.42.2.72:39708" method=AttestAgent node_attestor_type=k8s_psat request_id=fdb71371-0bc2-4233-8be3-5c3ae6746883 service=agent.v1.Agent subsystem_name=api
+time="2026-10-09T20:25:56.712101571Z" level=info msg="Agent attestation request completed" address="10.42.1.18:43712" agent_id="spiffe://spire-rmf.lab/spire/agent/k8s_psat/spire-cluster/2c7c0217-3703-4768-882c-100e7c64e10b" authorized_as=nobody authorized_via= caller_addr="10.42.1.18:43712" method=AttestAgent node_attestor_type=k8s_psat request_id=a3a72820-9955-48bd-b489-eec8aa882662 service=agent.v1.Agent subsystem_name=api

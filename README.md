@@ -13,8 +13,8 @@ to close the evidence gaps that report identified.
 
 | Phase | Goal | Controls addressed | Status |
 |---|---|---|---|
-| 0 | Private Only VPC and EKS foundation, compliant DNS | boundary / emulation fidelity | in progress |
-| 1 | HA datastore (RDS), KMS-backed keys, enforced TTL | IA-5, SC-12 | planned |
+| 0 | Private Only VPC and EKS foundation, compliant DNS | boundary / emulation fidelity | done |
+| 1 | External datastore (RDS), KMS-backed keys, enforced TTL, ECR mirror | IA-5, SC-12, CM-7, RA-5 | done |
 | 2 | Purpose-built namespaces, Controller Manager registration | AC-3, AC-6 | planned |
 | 3 | Live mTLS handshake between two workloads | SC-8 | planned |
 | 4 | Telemetry: issuance, failed attestation, retention | AU-2, AU-3, AU-9 | planned |

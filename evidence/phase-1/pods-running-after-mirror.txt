@@ -1,0 +1,6 @@
+NAME                            READY   STATUS    RESTARTS   AGE   IP            NODE                         NOMINATED NODE   READINESS GATES
+spire-agent-dhmld               1/1     Running   0          70s   10.42.1.18    ip-10-42-1-18.ec2.internal   <none>           <none>
+spire-agent-std2m               1/1     Running   0          70s   10.42.2.72    ip-10-42-2-72.ec2.internal   <none>           <none>
+spire-server-0                  2/2     Running   0          10m   10.42.1.88    ip-10-42-1-18.ec2.internal   <none>           <none>
+spire-spiffe-csi-driver-b4kbg   2/2     Running   0          14m   10.42.1.34    ip-10-42-1-18.ec2.internal   <none>           <none>
+spire-spiffe-csi-driver-lxwvb   2/2     Running   0          14m   10.42.2.108   ip-10-42-2-72.ec2.internal   <none>           <none>

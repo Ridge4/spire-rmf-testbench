@@ -1,0 +1,172 @@
+{
+    "repositories": [
+        {
+            "repositoryArn": "arn:aws:ecr:us-east-1:401352756244:repository/spiffe/spire-server",
+            "registryId": "401352756244",
+            "repositoryName": "spiffe/spire-server",
+            "repositoryUri": "401352756244.dkr.ecr.us-east-1.amazonaws.com/spiffe/spire-server",
+            "createdAt": "2026-10-09T14:32:27.107000-05:00",
+            "imageTagMutability": "IMMUTABLE",
+            "imageScanningConfiguration": {
+                "scanOnPush": true
+            },
+            "encryptionConfiguration": {
+                "encryptionType": "AES256"
+            }
+        },
+        {
+            "repositoryArn": "arn:aws:ecr:us-east-1:401352756244:repository/spiffe/spire-controller-manager",
+            "registryId": "401352756244",
+            "repositoryName": "spiffe/spire-controller-manager",
+            "repositoryUri": "401352756244.dkr.ecr.us-east-1.amazonaws.com/spiffe/spire-controller-manager",
+            "createdAt": "2026-10-09T14:33:55.864000-05:00",
+            "imageTagMutability": "IMMUTABLE",
+            "imageScanningConfiguration": {
+                "scanOnPush": true
+            },
+            "encryptionConfiguration": {
+                "encryptionType": "AES256"
+            }
+        },
+        {
+            "repositoryArn": "arn:aws:ecr:us-east-1:401352756244:repository/spiffe/spiffe-csi-driver",
+            "registryId": "401352756244",
+            "repositoryName": "spiffe/spiffe-csi-driver",
+            "repositoryUri": "401352756244.dkr.ecr.us-east-1.amazonaws.com/spiffe/spiffe-csi-driver",
+            "createdAt": "2026-10-09T14:34:40.500000-05:00",
+            "imageTagMutability": "IMMUTABLE",
+            "imageScanningConfiguration": {
+                "scanOnPush": true
+            },
+            "encryptionConfiguration": {
+                "encryptionType": "AES256"
+            }
+        },
+        {
+            "repositoryArn": "arn:aws:ecr:us-east-1:401352756244:repository/spiffe/spire-agent",
+            "registryId": "401352756244",
+            "repositoryName": "spiffe/spire-agent",
+            "repositoryUri": "401352756244.dkr.ecr.us-east-1.amazonaws.com/spiffe/spire-agent",
+            "createdAt": "2026-10-09T14:33:24.220000-05:00",
+            "imageTagMutability": "IMMUTABLE",
+            "imageScanningConfiguration": {
+                "scanOnPush": true
+            },
+            "encryptionConfiguration": {
+                "encryptionType": "AES256"
+            }
+        },
+        {
+            "repositoryArn": "arn:aws:ecr:us-east-1:401352756244:repository/spiffe/spiffe-helper",
+            "registryId": "401352756244",
+            "repositoryName": "spiffe/spiffe-helper",
+            "repositoryUri": "401352756244.dkr.ecr.us-east-1.amazonaws.com/spiffe/spiffe-helper",
+            "createdAt": "2026-10-09T14:34:56.543000-05:00",
+            "imageTagMutability": "IMMUTABLE",
+            "imageScanningConfiguration": {
+                "scanOnPush": true
+            },
+            "encryptionConfiguration": {
+                "encryptionType": "AES256"
+            }
+        },
+        {
+            "repositoryArn": "arn:aws:ecr:us-east-1:401352756244:repository/chainguard/bash",
+            "registryId": "401352756244",
+            "repositoryName": "chainguard/bash",
+            "repositoryUri": "401352756244.dkr.ecr.us-east-1.amazonaws.com/chainguard/bash",
+            "createdAt": "2026-10-09T14:41:27.111000-05:00",
+            "imageTagMutability": "IMMUTABLE",
+            "imageScanningConfiguration": {
+                "scanOnPush": true
+            },
+            "encryptionConfiguration": {
+                "encryptionType": "AES256"
+            }
+        },
+        {
+            "repositoryArn": "arn:aws:ecr:us-east-1:401352756244:repository/chainguard/min-toolkit-debug",
+            "registryId": "401352756244",
+            "repositoryName": "chainguard/min-toolkit-debug",
+            "repositoryUri": "401352756244.dkr.ecr.us-east-1.amazonaws.com/chainguard/min-toolkit-debug",
+            "createdAt": "2026-10-09T14:41:52.670000-05:00",
+            "imageTagMutability": "IMMUTABLE",
+            "imageScanningConfiguration": {
+                "scanOnPush": true
+            },
+            "encryptionConfiguration": {
+                "encryptionType": "AES256"
+            }
+        },
+        {
+            "repositoryArn": "arn:aws:ecr:us-east-1:401352756244:repository/spiffe/oidc-discovery-provider",
+            "registryId": "401352756244",
+            "repositoryName": "spiffe/oidc-discovery-provider",
+            "repositoryUri": "401352756244.dkr.ecr.us-east-1.amazonaws.com/spiffe/oidc-discovery-provider",
+            "createdAt": "2026-10-09T14:35:20.455000-05:00",
+            "imageTagMutability": "IMMUTABLE",
+            "imageScanningConfiguration": {
+                "scanOnPush": true
+            },
+            "encryptionConfiguration": {
+                "encryptionType": "AES256"
+            }
+        },
+        {
+            "repositoryArn": "arn:aws:ecr:us-east-1:401352756244:repository/sig-storage/csi-node-driver-registrar",
+            "registryId": "401352756244",
+            "repositoryName": "sig-storage/csi-node-driver-registrar",
+            "repositoryUri": "401352756244.dkr.ecr.us-east-1.amazonaws.com/sig-storage/csi-node-driver-registrar",
+            "createdAt": "2026-10-09T14:35:33.770000-05:00",
+            "imageTagMutability": "IMMUTABLE",
+            "imageScanningConfiguration": {
+                "scanOnPush": true
+            },
+            "encryptionConfiguration": {
+                "encryptionType": "AES256"
+            }
+        },
+        {
+            "repositoryArn": "arn:aws:ecr:us-east-1:401352756244:repository/smallstep/step-cli",
+            "registryId": "401352756244",
+            "repositoryName": "smallstep/step-cli",
+            "repositoryUri": "401352756244.dkr.ecr.us-east-1.amazonaws.com/smallstep/step-cli",
+            "createdAt": "2026-10-09T14:40:09.386000-05:00",
+            "imageTagMutability": "IMMUTABLE",
+            "imageScanningConfiguration": {
+                "scanOnPush": true
+            },
+            "encryptionConfiguration": {
+                "encryptionType": "AES256"
+            }
+        },
+        {
+            "repositoryArn": "arn:aws:ecr:us-east-1:401352756244:repository/library/busybox",
+            "registryId": "401352756244",
+            "repositoryName": "library/busybox",
+            "repositoryUri": "401352756244.dkr.ecr.us-east-1.amazonaws.com/library/busybox",
+            "createdAt": "2026-10-09T14:41:16.713000-05:00",
+            "imageTagMutability": "IMMUTABLE",
+            "imageScanningConfiguration": {
+                "scanOnPush": true
+            },
+            "encryptionConfiguration": {
+                "encryptionType": "AES256"
+            }
+        },
+        {
+            "repositoryArn": "arn:aws:ecr:us-east-1:401352756244:repository/kubectl",
+            "registryId": "401352756244",
+            "repositoryName": "kubectl",
+            "repositoryUri": "401352756244.dkr.ecr.us-east-1.amazonaws.com/kubectl",
+            "createdAt": "2026-10-09T14:39:11.836000-05:00",
+            "imageTagMutability": "IMMUTABLE",
+            "imageScanningConfiguration": {
+                "scanOnPush": true
+            },
+            "encryptionConfiguration": {
+                "encryptionType": "AES256"
+            }
+        }
+    ]
+}

@@ -1,0 +1,12 @@
+ghcr.io/spiffe/spire-server:1.15.3 -> 401352756244.dkr.ecr.us-east-1.amazonaws.com/spiffe/spire-server:1.15.3
+ghcr.io/spiffe/spire-agent:1.15.3 -> 401352756244.dkr.ecr.us-east-1.amazonaws.com/spiffe/spire-agent:1.15.3
+ghcr.io/spiffe/spire-controller-manager:0.8.0 -> 401352756244.dkr.ecr.us-east-1.amazonaws.com/spiffe/spire-controller-manager:0.8.0
+ghcr.io/spiffe/spiffe-csi-driver:0.2.7 -> 401352756244.dkr.ecr.us-east-1.amazonaws.com/spiffe/spiffe-csi-driver:0.2.7
+ghcr.io/spiffe/spiffe-helper:0.11.0 -> 401352756244.dkr.ecr.us-east-1.amazonaws.com/spiffe/spiffe-helper:0.11.0
+ghcr.io/spiffe/oidc-discovery-provider:1.15.3 -> 401352756244.dkr.ecr.us-east-1.amazonaws.com/spiffe/oidc-discovery-provider:1.15.3
+registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.15.0 -> 401352756244.dkr.ecr.us-east-1.amazonaws.com/sig-storage/csi-node-driver-registrar:v2.15.0
+registry.k8s.io/kubectl:v1.37.0 -> 401352756244.dkr.ecr.us-east-1.amazonaws.com/kubectl:v1.37.0
+docker.io/smallstep/step-cli:0.30.2 -> 401352756244.dkr.ecr.us-east-1.amazonaws.com/smallstep/step-cli:0.30.2
+busybox:1.37.0-uclibc -> 401352756244.dkr.ecr.us-east-1.amazonaws.com/library/busybox:1.37.0-uclibc
+cgr.dev/chainguard/bash:latest -> 401352756244.dkr.ecr.us-east-1.amazonaws.com/chainguard/bash:latest
+cgr.dev/chainguard/min-toolkit-debug:latest -> 401352756244.dkr.ecr.us-east-1.amazonaws.com/chainguard/min-toolkit-debug:latest

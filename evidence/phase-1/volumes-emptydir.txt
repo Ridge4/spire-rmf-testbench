@@ -1,0 +1,8 @@
+eks-pod-identity-token		
+server-tmp	{}	
+spire-config		
+spire-server-socket	{}	
+spire-controller-manager-tmp	{}	
+controller-manager-config		
+spire-data	{}	
+kube-api-access-b9ggq		

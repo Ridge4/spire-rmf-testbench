@@ -1,0 +1,177 @@
+# SPIRE values, Phase 1
+#
+# Chart:  spiffe/spire 0.30.3   (SPIRE 1.15.3)
+# Closes: IA-5 (enforced TTL), SC-12 (KMS-held key material),
+#         the SQLite single point of failure, and the air-gapped image pull.
+#
+# Every image key below was read from the chart's own values files at 0.30.3,
+# not guessed. Verify after any chart bump:
+#   helm template spire spiffe/spire --version 0.30.3 \
+#     --values helm/phase-1/spire-values.yaml \
+#     | grep -oE 'image: .*' | sort -u
+#
+# busybox and cgr.dev/chainguard images still render upstream. They appear only
+# under the charts' tests: blocks, so `helm install` never pulls them; only
+# `helm test` would. Noted as a limitation in docs/phase-1-images.md.
+
+global:
+  spire:
+    clusterName: spire-cluster
+    trustDomain: spire-rmf.lab           # not example.org this time
+
+  # These hooks exist to autofix common install problems, and they are what left
+  # a stuck spire-server-post-install job on the first attempt. Disabling them
+  # removes the kubectl hook image from the pull path and makes failures surface
+  # directly instead of being papered over, which is what this testbench wants.
+  installAndUpgradeHooks:
+    enabled: false
+
+# Federation with external OIDC relying parties is out of scope for Phases 1-4.
+# Disabling it also removes several images from the mirror set, which keeps the
+# supply-chain attestation surface smaller.
+spiffe-oidc-discovery-provider:
+  enabled: false
+
+spire-server:
+  # Pinned so it matches the EKS Pod Identity association in terraform/kms.tf.
+  # If these disagree, the server gets no KMS permissions.
+  serviceAccount:
+    create: true
+    name: spire-server
+
+  image:
+    registry: 401352756244.dkr.ecr.us-east-1.amazonaws.com
+    repository: spiffe/spire-server
+
+  # --- IA-5: lifetime restrictions set by configuration ----------------------
+  #
+  # The chart ships defaultX509SvidTTL: 4h, so the practicum's "~4 hour"
+  # evidence was the chart default rather than a configured policy. 1h is
+  # visibly not the default, which makes enforcement demonstrable when the
+  # rendered config is cited beside an issued SVID.
+  caTTL: 24h
+  defaultX509SvidTTL: 1h
+  defaultJwtSvidTTL: 5m
+
+  # --- SC-12: private key material lives in KMS ------------------------------
+  keyManager:
+    disk:
+      enabled: false                     # the practicum's posture
+    memory:
+      enabled: false
+    awsKMS:
+      enabled: true
+      region: us-east-1
+      # The plugin needs a stable way to recognize its own keys across
+      # restarts: either a file in persistent storage, or a static identifier.
+      # The value form is used here because it needs no volume, which is what
+      # lets persistence.type stay emptyDir. The identifier becomes part of the
+      # KMS alias names SPIRE creates, so it must be stable per server cluster.
+      keyIdentifierFile:
+        enabled: false                   # no key metadata file on disk
+      keyIdentifierValue:
+        enabled: true
+        identifier: spire-cluster
+
+  # --- Datastore: external PostgreSQL instead of bundled SQLite -------------
+  dataStore:
+    sql:
+      databaseType: postgres
+      databaseName: spire
+      host: spire-cluster-spire.c4lcqsecigxp.us-east-1.rds.amazonaws.com
+      port: 5432
+      username: spire
+      password: ""                       # supplied by externalSecret below
+      externalSecret:
+        enabled: true
+        name: spire-datastore            # created with kubectl; see phase-1-notes.md
+        key: password
+      disableMigration: false
+
+  # --- No stateful volume at all --------------------------------------------
+  #
+  # With the datastore in RDS and key material in KMS, the server has nothing
+  # left to persist. Stronger than the practicum's posture, which patched gp2 in
+  # as the default StorageClass and left reclaimPolicy: Delete holding the only
+  # copy of the identity database.
+  persistence:
+    type: emptyDir
+
+  # An external datastore makes replicas possible, which SQLite could not
+  # support. Raise this only when capturing availability evidence, and say so.
+  replicaCount: 1
+
+  logLevel: info
+
+  controllerManager:
+    enabled: true
+    image:
+      registry: 401352756244.dkr.ecr.us-east-1.amazonaws.com
+      repository: spiffe/spire-controller-manager
+
+  tools:
+    kubectl:
+      image:
+        registry: 401352756244.dkr.ecr.us-east-1.amazonaws.com
+        repository: kubectl
+        tag: v1.37.0
+    busybox:
+      image:
+        registry: 401352756244.dkr.ecr.us-east-1.amazonaws.com
+        repository: library/busybox
+        tag: 1.37.0-uclibc
+
+  # Init container that fixes file ownership on upgrades from older chart
+  # versions. With persistence.type: emptyDir there is no persistent volume for
+  # it to act on, but the chart still schedules it, so it needs a reachable
+  # image like everything else.
+  chown:
+    image:
+      registry: 401352756244.dkr.ecr.us-east-1.amazonaws.com
+      repository: library/busybox
+      tag: 1.37.0-uclibc
+
+spire-agent:
+  image:
+    registry: 401352756244.dkr.ecr.us-east-1.amazonaws.com
+    repository: spiffe/spire-agent
+  logLevel: info
+  tools:
+    busybox:
+      image:
+        registry: 401352756244.dkr.ecr.us-east-1.amazonaws.com
+        repository: library/busybox
+        tag: 1.37.0-uclibc
+  chown:
+    image:
+      registry: 401352756244.dkr.ecr.us-east-1.amazonaws.com
+      repository: library/busybox
+      tag: 1.37.0-uclibc
+
+  # Two agent init containers run chainguard/bash. Upstream pins them by digest
+  # inside the tag string ("latest@sha256:..."), which cannot survive mirroring:
+  # re-pushing to ECR produces a different manifest digest. The tag is therefore
+  # overridden with a plain "latest" pointing at the mirrored copy.
+  #
+  # socketAlternate is the "ensure-alternate-names" init container; fsGroupFix
+  # runs when the agent is non-root. Both are overridden because either may run.
+  fsGroupFix:
+    image:
+      registry: 401352756244.dkr.ecr.us-east-1.amazonaws.com
+      repository: chainguard/bash
+      tag: latest
+  socketAlternate:
+    image:
+      registry: 401352756244.dkr.ecr.us-east-1.amazonaws.com
+      repository: chainguard/bash
+      tag: latest
+
+spiffe-csi-driver:
+  image:
+    registry: 401352756244.dkr.ecr.us-east-1.amazonaws.com
+    repository: spiffe/spiffe-csi-driver
+  nodeDriverRegistrar:
+    image:
+      registry: 401352756244.dkr.ecr.us-east-1.amazonaws.com
+      repository: sig-storage/csi-node-driver-registrar
+      tag: v2.15.0

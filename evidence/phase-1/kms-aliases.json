@@ -1,0 +1,16 @@
+[
+    {
+        "AliasName": "alias/SPIRE_SERVER/spire-rmf_lab/spire-cluster/JWT-Signer-A",
+        "AliasArn": "arn:aws:kms:us-east-1:401352756244:alias/SPIRE_SERVER/spire-rmf_lab/spire-cluster/JWT-Signer-A",
+        "TargetKeyId": "97bb7abc-b3d3-441b-9b04-dcb037cef939",
+        "CreationDate": "2026-10-09T15:16:49.429000-05:00",
+        "LastUpdatedDate": "2026-10-09T15:16:49.429000-05:00"
+    },
+    {
+        "AliasName": "alias/SPIRE_SERVER/spire-rmf_lab/spire-cluster/x509-CA-A",
+        "AliasArn": "arn:aws:kms:us-east-1:401352756244:alias/SPIRE_SERVER/spire-rmf_lab/spire-cluster/x509-CA-A",
+        "TargetKeyId": "928e84df-9901-4438-9fcf-89e4169b67cf",
+        "CreationDate": "2026-10-09T15:16:49.297000-05:00",
+        "LastUpdatedDate": "2026-10-09T15:16:49.297000-05:00"
+    }
+]

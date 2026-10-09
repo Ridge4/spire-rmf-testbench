@@ -1,0 +1,7 @@
+        "KeyManager": [
+          {
+            "aws_kms": {
+              "plugin_data": {
+                "key_identifier_value": "spire-cluster",
+                "region": "us-east-1"
+              }

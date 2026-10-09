@@ -1,0 +1,105 @@
+USER-SUPPLIED VALUES:
+global:
+  installAndUpgradeHooks:
+    enabled: false
+  spire:
+    clusterName: spire-cluster
+    trustDomain: spire-rmf.lab
+spiffe-csi-driver:
+  image:
+    registry: 401352756244.dkr.ecr.us-east-1.amazonaws.com
+    repository: spiffe/spiffe-csi-driver
+  nodeDriverRegistrar:
+    image:
+      registry: 401352756244.dkr.ecr.us-east-1.amazonaws.com
+      repository: sig-storage/csi-node-driver-registrar
+      tag: v2.15.0
+spiffe-oidc-discovery-provider:
+  enabled: false
+spire-agent:
+  chown:
+    image:
+      registry: 401352756244.dkr.ecr.us-east-1.amazonaws.com
+      repository: library/busybox
+      tag: 1.37.0-uclibc
+  fsGroupFix:
+    image:
+      registry: 401352756244.dkr.ecr.us-east-1.amazonaws.com
+      repository: chainguard/bash
+      tag: latest
+  image:
+    registry: 401352756244.dkr.ecr.us-east-1.amazonaws.com
+    repository: spiffe/spire-agent
+  logLevel: info
+  socketAlternate:
+    image:
+      registry: 401352756244.dkr.ecr.us-east-1.amazonaws.com
+      repository: chainguard/bash
+      tag: latest
+  tools:
+    busybox:
+      image:
+        registry: 401352756244.dkr.ecr.us-east-1.amazonaws.com
+        repository: library/busybox
+        tag: 1.37.0-uclibc
+spire-server:
+  caTTL: 24h
+  chown:
+    image:
+      registry: 401352756244.dkr.ecr.us-east-1.amazonaws.com
+      repository: library/busybox
+      tag: 1.37.0-uclibc
+  controllerManager:
+    enabled: true
+    image:
+      registry: 401352756244.dkr.ecr.us-east-1.amazonaws.com
+      repository: spiffe/spire-controller-manager
+  dataStore:
+    sql:
+      databaseName: spire
+      databaseType: postgres
+      disableMigration: false
+      externalSecret:
+        enabled: true
+        key: password
+        name: spire-datastore
+      host: spire-cluster-spire.c4lcqsecigxp.us-east-1.rds.amazonaws.com
+      password: ""
+      port: 5432
+      username: spire
+  defaultJwtSvidTTL: 5m
+  defaultX509SvidTTL: 1h
+  image:
+    registry: 401352756244.dkr.ecr.us-east-1.amazonaws.com
+    repository: spiffe/spire-server
+  keyManager:
+    awsKMS:
+      enabled: true
+      keyIdentifierFile:
+        enabled: false
+      keyIdentifierValue:
+        enabled: true
+        identifier: spire-cluster
+      region: us-east-1
+    disk:
+      enabled: false
+    memory:
+      enabled: false
+  logLevel: info
+  persistence:
+    type: emptyDir
+  replicaCount: 1
+  serviceAccount:
+    create: true
+    name: spire-server
+  tools:
+    busybox:
+      image:
+        registry: 401352756244.dkr.ecr.us-east-1.amazonaws.com
+        repository: library/busybox
+        tag: 1.37.0-uclibc
+    kubectl:
+      image:
+        registry: 401352756244.dkr.ecr.us-east-1.amazonaws.com
+        repository: kubectl
+        tag: v1.37.0

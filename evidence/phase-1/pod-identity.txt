@@ -1,0 +1,36 @@
+                  eks.amazonaws.com/pod-identity=enabled
+                  release=spire
+                  release-namespace=spire-server
+                  statefulset.kubernetes.io/pod-name=spire-server-0
+--
+      AWS_CONTAINER_CREDENTIALS_FULL_URI:      http://169.254.170.23/v1/credentials
+      AWS_CONTAINER_AUTHORIZATION_TOKEN_FILE:  /var/run/secrets/pods.eks.amazonaws.com/serviceaccount/eks-pod-identity-token
+    Mounts:
+      /var/lib/spire from spire-data (rw)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-b9ggq (ro)
+      /var/run/secrets/pods.eks.amazonaws.com/serviceaccount from eks-pod-identity-token (ro)
+Containers:
+  spire-server:
+    Container ID:  containerd://5f1ca8d6c1d45b6f1542e84bffb1156d45bf7fc1a7d8a79c01dc854093f34191
+--
+      AWS_CONTAINER_CREDENTIALS_FULL_URI:      http://169.254.170.23/v1/credentials
+      AWS_CONTAINER_AUTHORIZATION_TOKEN_FILE:  /var/run/secrets/pods.eks.amazonaws.com/serviceaccount/eks-pod-identity-token
+    Mounts:
+      /run/spire/config from spire-config (ro)
+      /run/spire/data from spire-data (rw)
+--
+      /var/run/secrets/pods.eks.amazonaws.com/serviceaccount from eks-pod-identity-token (ro)
+  spire-controller-manager:
+    Container ID:  containerd://0dde7af5a21f623aa4cc7c7d0ba13e61f86e4fd77ca9673106e2042531140a19
+    Image:         401352756244.dkr.ecr.us-east-1.amazonaws.com/spiffe/spire-controller-manager:0.8.0
+--
+      AWS_CONTAINER_CREDENTIALS_FULL_URI:      http://169.254.170.23/v1/credentials
+      AWS_CONTAINER_AUTHORIZATION_TOKEN_FILE:  /var/run/secrets/pods.eks.amazonaws.com/serviceaccount/eks-pod-identity-token
+    Mounts:
+      /controller-manager-config.yaml from controller-manager-config (ro,path="controller-manager-config.yaml")
+      /tmp from spire-controller-manager-tmp (rw,path="spire-controller-manager")
+--
+      /var/run/secrets/pods.eks.amazonaws.com/serviceaccount from eks-pod-identity-token (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
