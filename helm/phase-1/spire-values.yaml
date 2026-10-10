@@ -71,7 +71,81 @@ spire-server:
         enabled: false                   # no key metadata file on disk
       keyIdentifierValue:
         enabled: true
-        identifier: spire-cluster
+        # Bumped to -v2 after the original keys were orphaned. See the keyPolicy
+        # note below: keys created under the plugin's default policy could not be
+        # managed by anyone, including the account root, once the creating IAM
+        # role was recreated by Terraform. Changing the identifier makes SPIRE
+        # create new keys under new alias names rather than colliding with them.
+        identifier: spire-cluster-v3
+
+      # Explicit key policy.
+      #
+      # Without this the plugin writes a default policy that grants only the
+      # principal that created the key. Terraform destroy/apply recreates the
+      # SPIRE server role, and although the role ARN string is unchanged, it is
+      # a different principal internally, so the old policy no longer matches.
+      # The result is a CA signing key that nobody can administer, not even the
+      # account root, because AWS's usual root escape hatch only exists if the
+      # key policy grants it.
+      #
+      # This policy keeps the account in control of its own keys across rebuilds:
+      #   - root keeps full administrative access (recovery path)
+      #   - the SPIRE server role gets exactly the operations the plugin needs
+      # Both statements grant by ARN, which re-resolves after a role is recreated.
+      #
+      # kms:PutKeyPolicy must appear in the role's statement. KMS runs a lockout
+      # safety check on CreateKey and rejects any policy that would stop the
+      # CALLING principal from updating the policy later. The caller here is the
+      # SPIRE server role, not root, so root holding kms:* does not satisfy it.
+      # Without this the key creation fails with MalformedPolicyDocumentException:
+      # "The new key policy will not allow you to update the key policy in the
+      # future."
+      keyPolicy:
+        policy: |
+          {
+            "Version": "2012-10-17",
+            "Id": "spire-server-key-policy",
+            "Statement": [
+              {
+                "Sid": "AllowAccountAdministration",
+                "Effect": "Allow",
+                "Principal": {
+                  "AWS": "arn:aws:iam::401352756244:root"
+                },
+                "Action": "kms:*",
+                "Resource": "*"
+              },
+              {
+                "Sid": "AllowSpireServerKeyUse",
+                "Effect": "Allow",
+                "Principal": {
+                  "AWS": "arn:aws:iam::401352756244:role/spire-cluster-spire-server"
+                },
+                "Action": [
+                  "kms:CreateAlias",
+                  "kms:UpdateAlias",
+                  "kms:PutKeyPolicy",
+                  "kms:DeleteAlias",
+                  "kms:DescribeKey",
+                  "kms:GetPublicKey",
+                  "kms:Sign",
+                  "kms:ScheduleKeyDeletion",
+                  "kms:ListResourceTags",
+                  "kms:TagResource"
+                ],
+                "Resource": "*"
+              }
+            ]
+          }
+
+      # Alias-based discovery is deprecated upstream and lists every key and
+      # alias in the account on each start. Tag-based discovery finds only the
+      # keys this plugin manages. Requires kms:TagResource and tag:GetResources
+      # in the identity policy (see terraform/kms.tf).
+      enableTagBasedKeyDiscovery: true
+      keyTags:
+        Component: spire-server
+        Cluster: spire-cluster
 
   # --- Datastore: external PostgreSQL instead of bundled SQLite -------------
   dataStore:

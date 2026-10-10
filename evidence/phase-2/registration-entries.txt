@@ -1,0 +1,17 @@
+Found 2 entries
+Entry ID                : spire-cluster.75db9653-0be0-45ed-a60a-4193b2d5ef12
+SPIFFE ID               : spiffe://spire-rmf.lab/ns/payments/sa/api
+Parent ID               : spiffe://spire-rmf.lab/spire/agent/k8s_psat/spire-cluster/fb596900-4e0a-46ad-aac8-2aefeadab958
+Revision                : 0
+X509-SVID TTL           : 3600
+JWT-SVID TTL            : default
+Selector                : k8s:pod-uid:7f637a64-1335-4d27-a44f-24d057242e2b
+
+Entry ID                : spire-cluster.90094fe7-7a96-4f18-866f-dfdd820cff47
+SPIFFE ID               : spiffe://spire-rmf.lab/ns/payments/sa/db-client
+Parent ID               : spiffe://spire-rmf.lab/spire/agent/k8s_psat/spire-cluster/04350561-cc3a-45c3-ae67-5d538426467b
+Revision                : 0
+X509-SVID TTL           : 3600
+JWT-SVID TTL            : default
+Selector                : k8s:pod-uid:95e7e831-620d-446d-846e-631b45c72560
+

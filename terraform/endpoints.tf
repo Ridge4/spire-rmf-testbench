@@ -36,6 +36,12 @@ resource "aws_vpc_endpoint" "s3" {
   }
 }
 
+# Interface endpoints.
+#
+# private_dns_enabled is what makes this work: each endpoint takes over DNS for
+# its service name inside the VPC, so the standard SDK endpoints resolve to
+# private addresses. This is the supported mechanism that the practicum's
+# 8.8.8.8 workaround stood in for.
 locals {
   interface_endpoints = [
     "ec2",          # CNI and node bootstrap
@@ -49,6 +55,7 @@ locals {
     "eks-auth",     # EKS Pod Identity
     "logs",         # CloudWatch Logs (Phase 4 telemetry)
     "kms",          # Phase 1 KMS-backed SPIRE key manager
+    "tagging",      # Resource Groups Tagging API; SPIRE tag-based key discovery
     "elasticloadbalancing",
     "autoscaling",
   ]

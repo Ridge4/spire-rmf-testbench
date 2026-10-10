@@ -48,6 +48,16 @@ resource "aws_iam_role_policy" "spire_server_kms" {
         Resource = "*"
       },
       {
+        # Tag-based key discovery (SPIRE 1.15.2+) replaces the deprecated
+        # alias-based mode, which listed every key and alias in the account on
+        # each start. This action is identity-policy only; it has no
+        # resource-level form.
+        Sid      = "TagBasedKeyDiscovery"
+        Effect   = "Allow"
+        Action   = ["tag:GetResources"]
+        Resource = "*"
+      },
+      {
         # Key operations. Tighten Resource to the key ARNs the plugin creates
         # once they exist, and record that narrowing as AC-6 evidence.
         Sid    = "UseKeys"
@@ -59,6 +69,9 @@ resource "aws_iam_role_policy" "spire_server_kms" {
           "kms:UpdateAlias",
           "kms:DeleteAlias",
           "kms:ScheduleKeyDeletion",
+          # Required by the KMS lockout safety check when the plugin creates a
+          # key with a custom key policy (see helm/phase-1/spire-values.yaml).
+          "kms:PutKeyPolicy",
         ]
         Resource = "*"
       },

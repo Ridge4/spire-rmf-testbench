@@ -1,0 +1,36 @@
+cff-version: 1.2.0
+title: >-
+  spire-rmf-testbench: a reproducible SPIFFE/SPIRE testbench for
+  NIST SP 800-53 evidence generation
+message: >-
+  If you use this software or its evidence artifacts, please cite it
+  using the metadata below.
+type: software
+authors:
+  - given-names: Samuel
+    family-names: Howard
+repository-code: 'https://github.com/Ridge4/spire-rmf-testbench'
+abstract: >-
+  Infrastructure-as-code and evidence artifacts for a SPIFFE/SPIRE
+  deployment on Amazon EKS, built inside a private-only VPC to emulate a
+  restricted federal cloud enclave. The testbench generates the evidence
+  a federal assessor would need to validate ephemeral workload identity
+  against NIST SP 800-53 controls, including authenticator management
+  (IA-5), cryptographic key storage (SC-12), service identification
+  (IA-9), transmission confidentiality (SC-8), and audit logging (AU-2,
+  AU-3). Terraform builds the VPC, EKS cluster, RDS datastore, and KMS
+  key management; Helm values configure SPIRE; captured logs and
+  configuration under evidence/ support each control claim.
+keywords:
+  - SPIFFE
+  - SPIRE
+  - workload identity
+  - zero trust architecture
+  - NIST SP 800-53
+  - Risk Management Framework
+  - Kubernetes
+  - Amazon EKS
+  - FedRAMP
+  - cloud security
+  - compliance evidence
+license: Apache-2.0

@@ -74,12 +74,53 @@ spire-server:
     repository: spiffe/spire-server
   keyManager:
     awsKMS:
+      enableTagBasedKeyDiscovery: true
       enabled: true
       keyIdentifierFile:
         enabled: false
       keyIdentifierValue:
         enabled: true
-        identifier: spire-cluster
+        identifier: spire-cluster-v3
+      keyPolicy:
+        policy: |
+          {
+            "Version": "2012-10-17",
+            "Id": "spire-server-key-policy",
+            "Statement": [
+              {
+                "Sid": "AllowAccountAdministration",
+                "Effect": "Allow",
+                "Principal": {
+                  "AWS": "arn:aws:iam::401352756244:root"
+                },
+                "Action": "kms:*",
+                "Resource": "*"
+              },
+              {
+                "Sid": "AllowSpireServerKeyUse",
+                "Effect": "Allow",
+                "Principal": {
+                  "AWS": "arn:aws:iam::401352756244:role/spire-cluster-spire-server"
+                },
+                "Action": [
+                  "kms:CreateAlias",
+                  "kms:UpdateAlias",
+                  "kms:PutKeyPolicy",
+                  "kms:DeleteAlias",
+                  "kms:DescribeKey",
+                  "kms:GetPublicKey",
+                  "kms:Sign",
+                  "kms:ScheduleKeyDeletion",
+                  "kms:ListResourceTags",
+                  "kms:TagResource"
+                ],
+                "Resource": "*"
+              }
+            ]
+          }
+      keyTags:
+        Cluster: spire-cluster
+        Component: spire-server
       region: us-east-1
     disk:
       enabled: false

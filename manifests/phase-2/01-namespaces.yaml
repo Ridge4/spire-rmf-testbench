@@ -1,0 +1,43 @@
+# Phase 2: purpose-built namespaces and service accounts.
+#
+# The practicum demonstrated identity issuance to the default service account in
+# the default namespace (spiffe://.../ns/default/sa/default), which is the
+# least-scoped identity Kubernetes can produce. That artifact contradicted the
+# least-privilege claim it was offered as evidence for.
+#
+# Here each workload gets its own namespace and service account, so the SPIFFE
+# ID derives from a deliberate identity decision rather than a default.
+#
+# The spiffe.io/spiffe-id label is what the ClusterSPIFFEID namespace selectors
+# match on. A namespace without it receives no identity at all, which is the
+# negative test in 04-negative-test.yaml.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: payments
+  labels:
+    spiffe.io/spiffe-id: "true"
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: api
+  namespace: payments
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: db-client
+  namespace: payments
+---
+# Deliberately NOT labelled for SPIFFE. Workloads here must receive no identity.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: unauthorized
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: rogue
+  namespace: unauthorized

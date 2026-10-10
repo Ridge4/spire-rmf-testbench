@@ -1,0 +1,54 @@
+# Phase 2: the negative test.
+#
+# This workload is configured exactly like the two in 03-workloads.yaml. It
+# mounts the same Workload API socket and runs the same fetch. The only
+# differences are that its namespace carries no spiffe.io/spiffe-id label and no
+# ClusterSPIFFEID selects it.
+#
+# Expected result: the fetch fails. No registration entry exists for this
+# workload, so the agent has nothing to issue.
+#
+# This is the artifact that distinguishes enforcement from configuration. A
+# successful fetch by an authorised workload shows the system works. A failed
+# fetch by an unauthorised one shows the scoping is actually doing something,
+# which is what AC-6 asks for.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rogue
+  namespace: unauthorized
+  labels:
+    app: rogue
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rogue
+  template:
+    metadata:
+      labels:
+        app: rogue
+    spec:
+      serviceAccountName: rogue
+      containers:
+        - name: workload
+          image: 401352756244.dkr.ecr.us-east-1.amazonaws.com/spiffe/spire-agent:1.15.3
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              while true; do
+                echo "=== $(date -u) === attempting fetch (expected to fail)"
+                /opt/spire/bin/spire-agent api fetch x509 \
+                  -socketPath /spiffe-workload-api/spire-agent.sock || \
+                  echo "DENIED: no identity issued to this workload"
+                sleep 300
+              done
+          volumeMounts:
+            - name: spiffe-workload-api
+              mountPath: /spiffe-workload-api
+              readOnly: true
+      volumes:
+        - name: spiffe-workload-api
+          csi:
+            driver: csi.spiffe.io
+            readOnly: true

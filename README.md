@@ -15,7 +15,7 @@ to close the evidence gaps that report identified.
 |---|---|---|---|
 | 0 | Private Only VPC and EKS foundation, compliant DNS | boundary / emulation fidelity | done |
 | 1 | External datastore (RDS), KMS-backed keys, enforced TTL, ECR mirror | IA-5, SC-12, CM-7, RA-5 | done |
-| 2 | Purpose-built namespaces, Controller Manager registration | AC-3, AC-6 | planned |
+| 2 | Purpose-built namespaces, scoped ClusterSPIFFEIDs, negative test | AC-3, AC-6 | in progress |
 | 3 | Live mTLS handshake between two workloads | SC-8 | planned |
 | 4 | Telemetry: issuance, failed attestation, retention | AU-2, AU-3, AU-9 | planned |
 | 5 | FIPS 140-validated crypto investigation | SC-13 | planned |

@@ -122,6 +122,14 @@ it does. Check `kubectl get nodes` before starting anything long.
 separate value overrides to resolve and was the largest single time cost of the
 phase.
 
+**KMS key management turned out to be the hardest part of the phase.** Four
+separate failures, written up in full in `phase-1-kms.md`: the plugin's default
+key policy can orphan keys permanently across a rebuild, the lockout safety
+check requires `kms:PutKeyPolicy`, tag-based key discovery needs its own VPC
+endpoint for the Resource Groups Tagging API, and CoreDNS caching hid the fix
+for that. Two keys from the first build are permanently unmanageable as a
+result. That document is the most substantial finding in this phase.
+
 **The KMS plugin needs a key identifier.** Setting `keyIdentifierFile.enabled`
 to false is not enough on its own. The plugin needs either a file or a static
 value so it can recognise its own keys after a restart. The value form is used

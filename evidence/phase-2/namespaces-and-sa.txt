@@ -1,0 +1,7 @@
+NAME           STATUS   AGE     LABELS
+payments       Active   5m15s   kubernetes.io/metadata.name=payments,spiffe.io/spiffe-id=true
+unauthorized   Active   5m15s   kubernetes.io/metadata.name=unauthorized
+NAME        SECRETS   AGE
+api         0         5m16s
+db-client   0         5m16s
+default     0         5m16s

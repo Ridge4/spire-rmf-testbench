@@ -1,0 +1,87 @@
+# Phase 2: test workloads that fetch their own SVID.
+#
+# Each pod mounts the SPIFFE Workload API socket through the CSI driver. No
+# secret, token, or key material is mounted: the pod proves what it is by its
+# position in the cluster, and the agent attests that before issuing anything.
+#
+# The image is the mirrored spire-agent, used here only because it ships the
+# `spire-agent api fetch` client. These are not SPIRE agents.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payments-api
+  namespace: payments
+  labels:
+    app: payments-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payments-api
+  template:
+    metadata:
+      labels:
+        app: payments-api
+    spec:
+      serviceAccountName: api
+      containers:
+        - name: workload
+          image: 401352756244.dkr.ecr.us-east-1.amazonaws.com/spiffe/spire-agent:1.15.3
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              while true; do
+                echo "=== $(date -u) ==="
+                /opt/spire/bin/spire-agent api fetch x509 \
+                  -socketPath /spiffe-workload-api/spire-agent.sock || true
+                sleep 300
+              done
+          volumeMounts:
+            - name: spiffe-workload-api
+              mountPath: /spiffe-workload-api
+              readOnly: true
+      volumes:
+        - name: spiffe-workload-api
+          csi:
+            driver: csi.spiffe.io
+            readOnly: true
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payments-db-client
+  namespace: payments
+  labels:
+    app: payments-db-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payments-db-client
+  template:
+    metadata:
+      labels:
+        app: payments-db-client
+    spec:
+      serviceAccountName: db-client
+      containers:
+        - name: workload
+          image: 401352756244.dkr.ecr.us-east-1.amazonaws.com/spiffe/spire-agent:1.15.3
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              while true; do
+                echo "=== $(date -u) ==="
+                /opt/spire/bin/spire-agent api fetch x509 \
+                  -socketPath /spiffe-workload-api/spire-agent.sock || true
+                sleep 300
+              done
+          volumeMounts:
+            - name: spiffe-workload-api
+              mountPath: /spiffe-workload-api
+              readOnly: true
+      volumes:
+        - name: spiffe-workload-api
+          csi:
+            driver: csi.spiffe.io
+            readOnly: true
