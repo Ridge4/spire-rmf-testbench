@@ -72,3 +72,13 @@ output "fluent_bit_role_arn" {
   description = "IAM role used by Fluent Bit via Pod Identity."
   value       = aws_iam_role.fluent_bit.arn
 }
+
+output "ecr_repositories" {
+  description = "Container registries this account serves to the cluster."
+  value       = sort([for r in aws_ecr_repository.images : r.name])
+}
+
+output "using_fips_endpoints" {
+  description = "Whether the FIPS variants of the AWS interface endpoints are in use."
+  value       = var.use_fips_endpoints
+}

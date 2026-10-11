@@ -24,7 +24,7 @@ to close the evidence gaps that report identified.
 ## Layout
 
 ```
-terraform/        infrastructure: VPC, EKS, RDS, KMS, logging
+terraform/        infrastructure: VPC, EKS, RDS, KMS, ECR, logging
 helm/             SPIRE chart values (one release, upgraded in place)
 manifests/        per-phase Kubernetes resources
   phase-2/          namespaces, scoped ClusterSPIFFEIDs, test workloads
@@ -43,6 +43,11 @@ scripts/          operational helpers
 evidence/         captured artifacts, organized by phase
 docs/             build notes and findings
 ```
+
+Set `use_fips_endpoints = true` to switch the AWS interface endpoints to their
+`-fips` variants where a service publishes one. Off by default: the testbench
+runs in a commercial region and makes no FIPS claim about its AWS calls. See
+`docs/phase-5-fips.md`.
 
 `helm/spire-values.yaml` is a single file rather than one per phase: there is
 one SPIRE release and later phases upgrade it in place. Comments in the file

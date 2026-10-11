@@ -61,11 +61,38 @@ locals {
   ]
 }
 
+# FIPS endpoints.
+#
+# Commercial AWS endpoints are not the FIPS endpoints. A federal deployment
+# claiming SC-13 has to reach services over FIPS-validated endpoints, which
+# carry different service names (for example com.amazonaws.us-east-1.kms-fips).
+# Not every service publishes one, so only the services in fips_capable are
+# switched; the rest keep their commercial names and that asymmetry is itself
+# worth recording in an authorisation package.
+#
+# This is off by default: the testbench runs in a commercial region and makes
+# no FIPS claim about its AWS calls. See docs/phase-5-fips.md.
+locals {
+  # Services with a -fips endpoint variant in commercial regions. Verify
+  # against the current AWS endpoint list before enabling; availability
+  # changes and differs between commercial and GovCloud.
+  fips_capable = ["ec2", "ecr.api", "ecr.dkr", "sts", "logs", "kms", "ssm", "elasticloadbalancing"]
+
+  endpoint_service_names = {
+    for svc in local.interface_endpoints :
+    svc => (
+      var.use_fips_endpoints && contains(local.fips_capable, svc)
+      ? "com.amazonaws.${var.region}.${svc}-fips"
+      : "com.amazonaws.${var.region}.${svc}"
+    )
+  }
+}
+
 resource "aws_vpc_endpoint" "interface" {
   for_each = toset(local.interface_endpoints)
 
   vpc_id              = aws_vpc.this.id
-  service_name        = "com.amazonaws.${var.region}.${each.value}"
+  service_name        = local.endpoint_service_names[each.value]
   vpc_endpoint_type   = "Interface"
   subnet_ids          = aws_subnet.private[*].id
   security_group_ids  = [aws_security_group.endpoints.id]

@@ -129,3 +129,22 @@ variable "denied_alarm_threshold" {
   type        = number
   default     = 10
 }
+
+variable "use_fips_endpoints" {
+  description = <<-EOT
+    Use the -fips variants of the AWS interface endpoints where a service
+    publishes one. Off by default: this testbench runs in a commercial region
+    and makes no FIPS claim about its AWS calls (see docs/phase-5-fips.md).
+
+    Enabling this is necessary but not sufficient for a federal SC-13 claim.
+    Most federal workloads also require GovCloud, and the SDK must be told to
+    use FIPS endpoints as well (AWS_USE_FIPS_ENDPOINT=true), since a VPC
+    endpoint only provides the network path.
+
+    Verify the -fips service names exist in your region before enabling:
+      aws ec2 describe-vpc-endpoint-services \
+        --query "ServiceNames[?contains(@,'fips')]"
+  EOT
+  type        = bool
+  default     = false
+}

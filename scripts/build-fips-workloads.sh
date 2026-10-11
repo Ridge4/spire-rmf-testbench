@@ -54,6 +54,7 @@ for component in server client; do
     -t "$image" \
     "$SRC_DIR"
 
+  # Declared in terraform/ecr.tf; created here only if Terraform has not run.
   aws ecr describe-repositories --repository-names "$repo" --region "$REGION" >/dev/null 2>&1 \
     || aws ecr create-repository \
          --repository-name "$repo" \

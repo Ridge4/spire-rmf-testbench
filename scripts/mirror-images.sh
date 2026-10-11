@@ -118,6 +118,9 @@ for src in "${IMAGES[@]}"; do
   echo "==> ${src}"
   echo "    -> ${dst}"
 
+  # Terraform declares the known repositories in terraform/ecr.tf. This
+  # creates one only if a new image has been added since the last apply; add
+  # it to the Terraform list afterwards so the registry set stays in code.
   aws ecr describe-repositories --repository-names "$repo" --region "$REGION" >/dev/null 2>&1 \
     || aws ecr create-repository \
          --repository-name "$repo" \
