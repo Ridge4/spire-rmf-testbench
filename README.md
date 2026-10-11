@@ -16,8 +16,8 @@ to close the evidence gaps that report identified.
 | 0 | Private Only VPC and EKS foundation, compliant DNS | boundary / emulation fidelity | done |
 | 1 | External datastore (RDS), KMS-backed keys, enforced TTL, ECR mirror | IA-5, SC-12, CM-7, RA-5 | done |
 | 2 | Purpose-built namespaces, scoped ClusterSPIFFEIDs, negative test | AC-3, AC-6 | done |
-| 3 | Live mTLS via Envoy SDS, identity-based authorisation | SC-8, AC-3 | in progress |
-| 4 | Telemetry to CloudWatch, metric filters, denial alarm | AU-2, AU-3, AU-9 | in progress |
+| 3 | Live mTLS via Envoy SDS, identity-based authorisation | SC-8, AC-3 | done |
+| 4 | Telemetry to CloudWatch, metric filters, denial alarm | AU-2, AU-3, AU-9 | done |
 | 5 | FIPS 140-validated crypto investigation | SC-13 | planned |
 
 ## Layout
