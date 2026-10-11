@@ -9,6 +9,9 @@ type: software
 authors:
   - given-names: Samuel
     family-names: Howard
+    # Add an ORCID if you have one; it links this archive to the report and to
+    # anything you publish later. Free at orcid.org.
+    # orcid: 'https://orcid.org/0000-0000-0000-0000'
 repository-code: 'https://github.com/Ridge4/spire-rmf-testbench'
 abstract: >-
   Infrastructure-as-code and evidence artifacts for a SPIFFE/SPIRE
@@ -34,3 +37,23 @@ keywords:
   - cloud security
   - compliance evidence
 license: Apache-2.0
+version: v0.1.0
+date-released: '2026-10-10'
+doi: 10.5281/zenodo.23290113
+# The practicum report this testbench supports. Listing it here means the
+# archive and the paper point at each other, which is what makes the pair read
+# as one piece of work rather than a repo someone happened to mention.
+references:
+  - type: report
+    title: >-
+      Ephemeral Workload Identity Under the Federal Risk Management Framework:
+      A Compliance Translation Toolkit for Zero-Trust Identity in Federal Cloud
+      Environments
+    authors:
+      - given-names: Samuel
+        family-names: Howard
+    institution:
+      name: Georgia Institute of Technology
+    year: 2026
+    month: 8
+    url: 'https://hdl.handle.net/1853/82102'
