@@ -16,8 +16,8 @@ to close the evidence gaps that report identified.
 | 0 | Private Only VPC and EKS foundation, compliant DNS | boundary / emulation fidelity | done |
 | 1 | External datastore (RDS), KMS-backed keys, enforced TTL, ECR mirror | IA-5, SC-12, CM-7, RA-5 | done |
 | 2 | Purpose-built namespaces, scoped ClusterSPIFFEIDs, negative test | AC-3, AC-6 | done |
-| 3 | Live mTLS via Envoy SDS, identity-based authorisation | SC-8, AC-3 | done |
-| 4 | Telemetry to CloudWatch, metric filters, denial alarm | AU-2, AU-3, AU-9 | done |
+| 3 | Live mTLS via Envoy SDS, identity-based authorisation | SC-8, AC-3 | in progress |
+| 4 | Telemetry to CloudWatch, metric filters, denial alarm | AU-2, AU-3, AU-9 | in progress |
 | 5 | FIPS 140-validated crypto investigation | SC-13 | planned |
 
 ## Layout
@@ -56,11 +56,22 @@ Connect to the jump host:
 aws ssm start-session --target $(terraform output -raw jump_host_id)
 ```
 
-Tear down when not actively working. EKS bills for the control plane hourly:
+Tear down when not actively working. EKS bills for the control plane hourly,
+and the interface endpoints are billed per hour per availability zone.
+
+Run the cleanup script first. Two things outlive Terraform and cause trouble:
+orphaned VPC CNI network interfaces block subnet deletion for 15-20 minutes,
+and the KMS keys SPIRE created become permanently unmanageable once destroy
+removes the IAM role their key policy names (see `docs/phase-1-kms.md`).
 
 ```bash
-terraform destroy
+./scripts/pre-destroy-cleanup.sh            # report what would be cleaned
+./scripts/pre-destroy-cleanup.sh --apply    # clean it up
+cd terraform && terraform destroy
 ```
+
+Commit any evidence first. The ECR repositories and mirrored images survive
+destroy, so a rebuild does not repeat that step.
 
 ## Cost note
 
