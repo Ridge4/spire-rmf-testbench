@@ -43,6 +43,14 @@ spire-server:
     registry: 401352756244.dkr.ecr.us-east-1.amazonaws.com
     repository: spiffe/spire-server
 
+  # --- AU-2 / AU-3: structured audit logging ---------------------------------
+  #
+  # Separate from the operational log. SPIRE emits a structured record per API
+  # call, including the caller's identity and the outcome, which is a far better
+  # audit source than matching keywords in log prose. The Phase 4 metric filters
+  # fall back to text matching; once this is on, prefer the audit events.
+  auditLogEnabled: true
+
   # --- IA-5: lifetime restrictions set by configuration ----------------------
   #
   # The chart ships defaultX509SvidTTL: 4h, so the practicum's "~4 hour"
@@ -179,6 +187,36 @@ spire-server:
 
   controllerManager:
     enabled: true
+
+    # Phase 2: disable the chart's built-in "default" ClusterSPIFFEID.
+    #
+    # It ships with empty podSelector and namespaceSelector, which means it
+    # matches every pod in every namespace and hands each one an identity. That
+    # is the opposite of least privilege, and it is the config-level source of
+    # the ns/default/sa/default artifact the practicum reported. Scoped
+    # replacements live in manifests/phase-2/02-clusterspiffeids.yaml.
+    #
+    # Disabling it also removes the Helm install race: the chart was applying
+    # these resources in the same pass that creates the server, before the
+    # validating webhook had any endpoints.
+    identities:
+      clusterSPIFFEIDs:
+        # All three identities the chart ships are disabled. Each one is applied
+        # by Helm in the same pass that creates the server, before the
+        # validating webhook has endpoints, which is what failed every upgrade
+        # until they were turned off.
+        #
+        # They are also not wanted on their own merits: "default" matches every
+        # pod in every namespace, and the other two belong to components this
+        # testbench does not run. Phase 2 and 3 supply scoped replacements in
+        # manifests/.
+        default:
+          enabled: false
+        oidc-discovery-provider:
+          enabled: false
+        test-keys:
+          enabled: false
+
     image:
       registry: 401352756244.dkr.ecr.us-east-1.amazonaws.com
       repository: spiffe/spire-controller-manager

@@ -108,3 +108,24 @@ variable "spire_server_service_account" {
   type        = string
   default     = "spire-server"
 }
+
+# ---------------------------------------------------------------------------
+# Phase 4
+# ---------------------------------------------------------------------------
+
+variable "audit_retention_days" {
+  description = <<-EOT
+    CloudWatch retention for identity audit records. 30 days suits a testbench.
+    Federal systems commonly require far longer (AU-11 is typically read as at
+    least one year online for moderate baselines), so state the testbench value
+    as a deviation rather than a recommendation.
+  EOT
+  type        = number
+  default     = 30
+}
+
+variable "denied_alarm_threshold" {
+  description = "Identity denials in a 5-minute period before the alarm fires."
+  type        = number
+  default     = 10
+}

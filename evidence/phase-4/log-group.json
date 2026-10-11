@@ -1,0 +1,15 @@
+{
+    "logGroups": [
+        {
+            "logGroupName": "/spire/spire-cluster/identity",
+            "creationTime": 1791676973798,
+            "retentionInDays": 30,
+            "metricFilterCount": 2,
+            "arn": "arn:aws:logs:us-east-1:401352756244:log-group:/spire/spire-cluster/identity:*",
+            "storedBytes": 0,
+            "logGroupClass": "STANDARD",
+            "logGroupArn": "arn:aws:logs:us-east-1:401352756244:log-group:/spire/spire-cluster/identity",
+            "deletionProtectionEnabled": false
+        }
+    ]
+}

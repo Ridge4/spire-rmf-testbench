@@ -1,0 +1,3 @@
+NAME               READY   STATUS    RESTARTS   AGE     IP            NODE                          NOMINATED NODE   READINESS GATES
+fluent-bit-gjcbz   1/1     Running   0          8m13s   10.42.2.195   ip-10-42-2-45.ec2.internal    <none>           <none>
+fluent-bit-kvnr7   1/1     Running   0          8m13s   10.42.1.141   ip-10-42-1-150.ec2.internal   <none>           <none>

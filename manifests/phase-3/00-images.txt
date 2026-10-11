@@ -1,0 +1,2 @@
+docker.io/envoyproxy/envoy:v1.31.5
+docker.io/curlimages/curl:8.11.1

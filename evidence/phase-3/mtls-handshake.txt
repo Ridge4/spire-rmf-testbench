@@ -1,0 +1,1 @@
+MTLS peer=spiffe://spire-rmf.lab/ns/payments/sa/echo-client tls_version=TLSv1.2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 subject=O=SPIRE,C=US response=200

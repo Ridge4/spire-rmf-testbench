@@ -1,0 +1,5 @@
+--- Sat Oct 10 23:44:54 UTC 2026 ---
+hello over mTLS from echo-server
+
+HTTP 200
+CLIENT upstream=172.20.205.94:8443 response=200 flags=-

@@ -1,0 +1,158 @@
+# Phase 4: ship identity telemetry to CloudWatch.
+#
+# Fluent Bit tails the container logs of the SPIRE control plane and the
+# workloads, and writes them to the log group created in terraform/logging.tf.
+# Credentials come from EKS Pod Identity, so there are no AWS keys in the
+# cluster.
+#
+# Scope is deliberately narrow: only identity-relevant containers are shipped,
+# not every pod on the node. An audit pipeline that collects everything is
+# harder to defend and more expensive than one that collects what the control
+# says to collect.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: observability
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: fluent-bit
+  namespace: observability
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: fluent-bit
+rules:
+  - apiGroups: [""]
+    resources: ["namespaces", "pods", "pods/logs"]
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: fluent-bit
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: fluent-bit
+subjects:
+  - kind: ServiceAccount
+    name: fluent-bit
+    namespace: observability
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluent-bit-config
+  namespace: observability
+data:
+  fluent-bit.conf: |
+    [SERVICE]
+        Flush                     5
+        Daemon                    Off
+        Log_Level                 info
+        Parsers_File              parsers.conf
+        HTTP_Server               On
+        HTTP_Listen               0.0.0.0
+        HTTP_Port                 2020
+
+    # SPIRE control plane: attestation and issuance events
+    [INPUT]
+        Name                      tail
+        Tag                       spire.server.*
+        Path                      /var/log/containers/spire-server-*_spire-server_*.log
+        multiline.parser          cri
+        DB                        /var/log/flb_spire_server.db
+        Mem_Buf_Limit             16MB
+        Skip_Long_Lines           On
+        Refresh_Interval          10
+
+    [INPUT]
+        Name                      tail
+        Tag                       spire.agent.*
+        Path                      /var/log/containers/spire-agent-*_spire-server_*.log
+        multiline.parser          cri
+        DB                        /var/log/flb_spire_agent.db
+        Mem_Buf_Limit             16MB
+        Skip_Long_Lines           On
+        Refresh_Interval          10
+
+    # Workloads: SVID receipt, denials, and mTLS handshakes
+    [INPUT]
+        Name                      tail
+        Tag                       spire.workload.*
+        Path                      /var/log/containers/*_payments_*.log,/var/log/containers/*_unauthorized_*.log
+        multiline.parser          cri
+        DB                        /var/log/flb_workload.db
+        Mem_Buf_Limit             16MB
+        Skip_Long_Lines           On
+        Refresh_Interval          10
+
+    [FILTER]
+        Name                      kubernetes
+        Match                     spire.*
+        Kube_Tag_Prefix           spire.server.var.log.containers.
+        Merge_Log                 On
+        Keep_Log                  On
+        K8S-Logging.Parser        On
+        K8S-Logging.Exclude       Off
+
+    [OUTPUT]
+        Name                      cloudwatch_logs
+        Match                     spire.*
+        region                    us-east-1
+        log_group_name            /spire/spire-cluster/identity
+        log_stream_prefix         k8s-
+        auto_create_group         false
+        auto_retry_requests       true
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: fluent-bit
+  namespace: observability
+  labels:
+    app: fluent-bit
+spec:
+  selector:
+    matchLabels:
+      app: fluent-bit
+  template:
+    metadata:
+      labels:
+        app: fluent-bit
+    spec:
+      serviceAccountName: fluent-bit
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: fluent-bit
+          image: 401352756244.dkr.ecr.us-east-1.amazonaws.com/aws-observability/aws-for-fluent-bit:2.32.5
+          resources:
+            limits:
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          volumeMounts:
+            - name: config
+              mountPath: /fluent-bit/etc/fluent-bit.conf
+              subPath: fluent-bit.conf
+            - name: varlog
+              mountPath: /var/log
+            - name: varlibdockercontainers
+              mountPath: /var/lib/docker/containers
+              readOnly: true
+      volumes:
+        - name: config
+          configMap:
+            name: fluent-bit-config
+        - name: varlog
+          hostPath:
+            path: /var/log
+        - name: varlibdockercontainers
+          hostPath:
+            path: /var/lib/docker/containers
+      tolerations:
+        - operator: Exists

@@ -62,3 +62,13 @@ output "spire_server_role_arn" {
   description = "IAM role assumed by the SPIRE server via Pod Identity."
   value       = aws_iam_role.spire_server.arn
 }
+
+output "identity_log_group" {
+  description = "CloudWatch log group holding SPIRE identity audit records."
+  value       = aws_cloudwatch_log_group.spire_identity.name
+}
+
+output "fluent_bit_role_arn" {
+  description = "IAM role used by Fluent Bit via Pod Identity."
+  value       = aws_iam_role.fluent_bit.arn
+}

@@ -1,0 +1,33 @@
+--- Sat Oct 10 23:44:57 UTC 2026 --- attempting connection (expected to fail)
+upstream connect error or disconnect/reset before headers. reset reason: remote connection failure, transport failure reason: TLS error: Secret is not supplied by SDS
+HTTP 503
+[2026-10-10 23:44:36.268][1][info][main] [source/server/server.cc:493]   response header map: 432 bytes: :status,access-control-allow-credentials,access-control-allow-headers,access-control-allow-methods,access-control-allow-origin,access-control-allow-private-network,access-control-expose-headers,access-control-max-age,age,cache-control,connection,content-encoding,content-length,content-type,date,etag,expires,grpc-message,grpc-status,keep-alive,last-modified,location,proxy-connection,proxy-status,server,transfer-encoding,upgrade,vary,via,x-envoy-attempt-count,x-envoy-decorator-operation,x-envoy-degraded,x-envoy-immediate-health-check-fail,x-envoy-ratelimited,x-envoy-upstream-canary,x-envoy-upstream-healthchecked-cluster,x-envoy-upstream-service-time,x-request-id
+[2026-10-10 23:44:36.268][1][info][main] [source/server/server.cc:493]   response trailer map: 144 bytes: grpc-message,grpc-status
+[2026-10-10 23:44:36.279][1][info][main] [source/server/server.cc:869] runtime: {}
+[2026-10-10 23:44:36.279][1][info][admin] [source/server/admin/admin.cc:65] admin address: 127.0.0.1:9901
+[2026-10-10 23:44:36.279][1][info][config] [source/server/configuration_impl.cc:168] loading tracing configuration
+[2026-10-10 23:44:36.279][1][info][config] [source/server/configuration_impl.cc:124] loading 0 static secret(s)
+[2026-10-10 23:44:36.279][1][info][config] [source/server/configuration_impl.cc:130] loading 2 cluster(s)
+[2026-10-10 23:44:36.282][1][info][config] [source/server/configuration_impl.cc:138] loading 1 listener(s)
+[2026-10-10 23:44:36.283][1][warning][misc] [source/extensions/filters/network/http_connection_manager/config.cc:83] internal_address_config is not configured. The existing default behaviour will trust RFC1918 IP addresses, but this will be changed in next release. Please explictily config internal address config as the migration step.
+[2026-10-10 23:44:36.283][1][info][config] [source/server/configuration_impl.cc:154] loading stats configuration
+[2026-10-10 23:44:36.284][1][warning][main] [source/server/server.cc:936] There is no configured limit to the number of allowed active downstream connections. Configure a limit in `envoy.resource_monitors.downstream_connections` resource monitor.
+[2026-10-10 23:44:36.284][1][info][main] [source/server/server.cc:978] starting main dispatch loop
+[2026-10-10 23:44:37.806][1][warning][config] [./source/extensions/config_subscription/grpc/grpc_stream.h:176] StreamSecrets gRPC config stream to spire_agent closed: 3, workload is not authorized for the requested identities ["default"]
+[2026-10-10 23:44:37.992][1][warning][config] [./source/extensions/config_subscription/grpc/grpc_stream.h:176] StreamSecrets gRPC config stream to spire_agent closed: 3, workload is not authorized for the requested identities ["default"]
+[2026-10-10 23:44:38.689][1][warning][config] [./source/extensions/config_subscription/grpc/grpc_stream.h:176] StreamSecrets gRPC config stream to spire_agent closed: 3, workload is not authorized for the requested identities ["default"]
+[2026-10-10 23:44:39.407][1][warning][config] [./source/extensions/config_subscription/grpc/grpc_stream.h:176] StreamSecrets gRPC config stream to spire_agent closed: 3, workload is not authorized for the requested identities ["default"]
+[2026-10-10 23:44:39.712][1][warning][config] [./source/extensions/config_subscription/grpc/grpc_stream.h:176] StreamSecrets gRPC config stream to spire_agent closed: 3, workload is not authorized for the requested identities ["default"]
+[2026-10-10 23:44:46.334][1][warning][config] [./source/extensions/config_subscription/grpc/grpc_stream.h:176] StreamSecrets gRPC config stream to spire_agent closed: 3, workload is not authorized for the requested identities ["default"]
+[2026-10-10 23:44:51.295][1][warning][config] [source/extensions/config_subscription/grpc/grpc_subscription_impl.cc:130] gRPC config: initial fetch timed out for type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.Secret
+[2026-10-10 23:44:51.295][1][info][runtime] [source/common/runtime/runtime_impl.cc:625] RTDS has finished initialization
+[2026-10-10 23:44:51.295][1][info][upstream] [source/common/upstream/cluster_manager_impl.cc:249] cm init: all clusters initialized
+[2026-10-10 23:44:51.295][1][info][main] [source/server/server.cc:958] all clusters initialized. initializing init manager
+[2026-10-10 23:44:51.295][1][info][config] [source/common/listener_manager/listener_manager_impl.cc:930] all dependencies initialized. starting workers
+[2026-10-10 23:44:55.966][1][warning][config] [./source/extensions/config_subscription/grpc/grpc_stream.h:176] StreamSecrets gRPC config stream to spire_agent closed: 3, workload is not authorized for the requested identities ["default"]
+ROGUE upstream=172.20.205.94:8443 response=503 flags=UF
+[2026-10-10 23:45:01.675][1][warning][config] [./source/extensions/config_subscription/grpc/grpc_stream.h:176] StreamSecrets gRPC config stream to spire_agent closed: 3, workload is not authorized for the requested identities ["default"]
+[2026-10-10 23:45:15.939][1][warning][config] [./source/extensions/config_subscription/grpc/grpc_stream.h:176] StreamSecrets gRPC config stream to spire_agent closed: 3, workload is not authorized for the requested identities ["default"]
+[2026-10-10 23:45:34.687][1][warning][config] [./source/extensions/config_subscription/grpc/grpc_stream.h:176] StreamSecrets gRPC config stream to spire_agent closed: 3, workload is not authorized for the requested identities ["default"]
+[2026-10-10 23:45:50.395][1][warning][config] [./source/extensions/config_subscription/grpc/grpc_stream.h:176] StreamSecrets gRPC config stream to spire_agent closed: 3, workload is not authorized for the requested identities ["default"]
+[2026-10-10 23:45:51.237][1][warning][config] [./source/extensions/config_subscription/grpc/grpc_stream.h:176] StreamSecrets gRPC config stream to spire_agent closed: 3, workload is not authorized for the requested identities ["default"]

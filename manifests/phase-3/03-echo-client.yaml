@@ -1,0 +1,165 @@
+# Phase 3: the mTLS client.
+#
+# Two containers. Envoy holds the SVID and originates mTLS upstream; curl drives
+# traffic by calling plain HTTP on localhost, which Envoy upgrades. The
+# application container never sees a certificate, which is the point: the
+# workload proves what it is by where it runs, and the identity plane handles
+# the cryptography.
+#
+# The client also validates the server's SPIFFE ID, so the authentication is
+# mutual in both directions rather than just the server checking the client.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: echo-client-envoy
+  namespace: payments
+data:
+  envoy.yaml: |
+    node:
+      id: echo-client
+      cluster: echo-client
+
+    static_resources:
+      listeners:
+        - name: local_plain
+          address:
+            socket_address: { address: 127.0.0.1, port_value: 8080 }
+          filter_chains:
+            - filters:
+                - name: envoy.filters.network.http_connection_manager
+                  typed_config:
+                    "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
+                    stat_prefix: egress
+                    access_log:
+                      - name: envoy.access_loggers.stdout
+                        typed_config:
+                          "@type": type.googleapis.com/envoy.extensions.access_loggers.stream.v3.StdoutAccessLog
+                          log_format:
+                            text_format_source:
+                              inline_string: "CLIENT upstream=%UPSTREAM_HOST% response=%RESPONSE_CODE% flags=%RESPONSE_FLAGS%\n"
+                    route_config:
+                      name: local
+                      virtual_hosts:
+                        - name: local
+                          domains: ["*"]
+                          routes:
+                            - match: { prefix: "/" }
+                              route: { cluster: echo_server_mtls }
+                    http_filters:
+                      - name: envoy.filters.http.router
+                        typed_config:
+                          "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
+
+      clusters:
+        - name: echo_server_mtls
+          type: STRICT_DNS
+          connect_timeout: 5s
+          load_assignment:
+            cluster_name: echo_server_mtls
+            endpoints:
+              - lb_endpoints:
+                  - endpoint:
+                      address:
+                        socket_address:
+                          address: echo-server.payments.svc.cluster.local
+                          port_value: 8443
+          transport_socket:
+            name: envoy.transport_sockets.tls
+            typed_config:
+              "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext
+              common_tls_context:
+                tls_params:
+                  tls_minimum_protocol_version: TLSv1_2
+                tls_certificate_sds_secret_configs:
+                  - name: "default"
+                    sds_config:
+                      resource_api_version: V3
+                      api_config_source:
+                        api_type: GRPC
+                        transport_api_version: V3
+                        grpc_services:
+                          - envoy_grpc: { cluster_name: spire_agent }
+                combined_validation_context:
+                  default_validation_context:
+                    match_typed_subject_alt_names:
+                      - san_type: URI
+                        matcher:
+                          exact: "spiffe://spire-rmf.lab/ns/payments/sa/echo-server"
+                  validation_context_sds_secret_config:
+                    name: "spiffe://spire-rmf.lab"
+                    sds_config:
+                      resource_api_version: V3
+                      api_config_source:
+                        api_type: GRPC
+                        transport_api_version: V3
+                        grpc_services:
+                          - envoy_grpc: { cluster_name: spire_agent }
+
+        - name: spire_agent
+          type: STATIC
+          typed_extension_protocol_options:
+            envoy.extensions.upstreams.http.v3.HttpProtocolOptions:
+              "@type": type.googleapis.com/envoy.extensions.upstreams.http.v3.HttpProtocolOptions
+              explicit_http_config:
+                http2_protocol_options: {}
+          load_assignment:
+            cluster_name: spire_agent
+            endpoints:
+              - lb_endpoints:
+                  - endpoint:
+                      address:
+                        pipe:
+                          path: /spiffe-workload-api/spire-agent.sock
+
+    admin:
+      address:
+        socket_address: { address: 127.0.0.1, port_value: 9901 }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echo-client
+  namespace: payments
+  labels:
+    app: echo-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: echo-client
+  template:
+    metadata:
+      labels:
+        app: echo-client
+    spec:
+      serviceAccountName: echo-client
+      containers:
+        - name: envoy
+          image: 401352756244.dkr.ecr.us-east-1.amazonaws.com/envoyproxy/envoy:v1.31.5
+          args: ["-c", "/etc/envoy/envoy.yaml", "-l", "info"]
+          volumeMounts:
+            - name: envoy-config
+              mountPath: /etc/envoy
+              readOnly: true
+            - name: spiffe-workload-api
+              mountPath: /spiffe-workload-api
+              readOnly: true
+        - name: curl
+          image: 401352756244.dkr.ecr.us-east-1.amazonaws.com/curlimages/curl:8.11.1
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              sleep 20
+              while true; do
+                echo "--- $(date -u) ---"
+                curl -sS -o - -w "\nHTTP %{http_code}\n" http://127.0.0.1:8080/ || echo "request failed"
+                sleep 60
+              done
+      volumes:
+        - name: envoy-config
+          configMap:
+            name: echo-client-envoy
+        - name: spiffe-workload-api
+          csi:
+            driver: csi.spiffe.io
+            readOnly: true

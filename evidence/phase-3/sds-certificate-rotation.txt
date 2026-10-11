@@ -1,0 +1,48 @@
+=== current time ===
+Sun Oct 11 00:51:59 UTC 2026
+=== pod ages and restart counts ===
+NAME                                  READY   STATUS    RESTARTS   AGE
+echo-client-644b4c94c9-ptkxj          2/2     Running   0          67m
+echo-server-5c9df95556-9vsz5          1/1     Running   0          67m
+payments-api-7f8cfddbbc-4pq5j         1/1     Running   0          83m
+payments-db-client-658b4f9457-dzlrc   1/1     Running   0          82m
+=== successive SVID validity windows, same pod, no restart ===
+SPIFFE ID:		spiffe://spire-rmf.lab/ns/payments/sa/api
+SVID Valid After:	2026-10-10 23:28:05 +0000 UTC
+SVID Valid Until:	2026-10-11 00:28:15 +0000 UTC
+CA #1 Valid After:	2026-10-10 20:29:17 +0000 UTC
+CA #1 Valid Until:	2026-10-11 20:29:27 +0000 UTC
+CA #2 Valid After:	2026-10-10 23:00:15 +0000 UTC
+CA #2 Valid Until:	2026-10-11 23:00:25 +0000 UTC
+SPIFFE ID:		spiffe://spire-rmf.lab/ns/payments/sa/api
+SVID Valid After:	2026-10-10 23:56:04 +0000 UTC
+SVID Valid Until:	2026-10-11 00:56:14 +0000 UTC
+CA #1 Valid After:	2026-10-10 20:29:17 +0000 UTC
+CA #1 Valid Until:	2026-10-11 20:29:27 +0000 UTC
+CA #2 Valid After:	2026-10-10 23:00:15 +0000 UTC
+CA #2 Valid Until:	2026-10-11 23:00:25 +0000 UTC
+SPIFFE ID:		spiffe://spire-rmf.lab/ns/payments/sa/api
+SVID Valid After:	2026-10-11 00:23:56 +0000 UTC
+SVID Valid Until:	2026-10-11 01:24:06 +0000 UTC
+CA #1 Valid After:	2026-10-10 20:29:17 +0000 UTC
+CA #1 Valid Until:	2026-10-11 20:29:27 +0000 UTC
+CA #2 Valid After:	2026-10-10 23:00:15 +0000 UTC
+CA #2 Valid Until:	2026-10-11 23:00:25 +0000 UTC
+=== mTLS traffic spanning the rotation boundary ===
+--- Sat Oct 10 23:44:54 UTC 2026 ---
+hello over mTLS from echo-server
+
+HTTP 200
+--- Sat Oct 10 23:45:54 UTC 2026 ---
+hello over mTLS from echo-server
+
+HTTP 200
+...
+--- Sun Oct 11 00:50:54 UTC 2026 ---
+hello over mTLS from echo-server
+
+HTTP 200
+--- Sun Oct 11 00:51:54 UTC 2026 ---
+hello over mTLS from echo-server
+
+HTTP 200

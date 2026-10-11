@@ -1,0 +1,112 @@
+apiVersion: v1
+data:
+  envoy.yaml: |
+    node:
+      id: echo-client
+      cluster: echo-client
+
+    static_resources:
+      listeners:
+        - name: local_plain
+          address:
+            socket_address: { address: 127.0.0.1, port_value: 8080 }
+          filter_chains:
+            - filters:
+                - name: envoy.filters.network.http_connection_manager
+                  typed_config:
+                    "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
+                    stat_prefix: egress
+                    access_log:
+                      - name: envoy.access_loggers.stdout
+                        typed_config:
+                          "@type": type.googleapis.com/envoy.extensions.access_loggers.stream.v3.StdoutAccessLog
+                          log_format:
+                            text_format_source:
+                              inline_string: "CLIENT upstream=%UPSTREAM_HOST% response=%RESPONSE_CODE% flags=%RESPONSE_FLAGS%\n"
+                    route_config:
+                      name: local
+                      virtual_hosts:
+                        - name: local
+                          domains: ["*"]
+                          routes:
+                            - match: { prefix: "/" }
+                              route: { cluster: echo_server_mtls }
+                    http_filters:
+                      - name: envoy.filters.http.router
+                        typed_config:
+                          "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
+
+      clusters:
+        - name: echo_server_mtls
+          type: STRICT_DNS
+          connect_timeout: 5s
+          load_assignment:
+            cluster_name: echo_server_mtls
+            endpoints:
+              - lb_endpoints:
+                  - endpoint:
+                      address:
+                        socket_address:
+                          address: echo-server.payments.svc.cluster.local
+                          port_value: 8443
+          transport_socket:
+            name: envoy.transport_sockets.tls
+            typed_config:
+              "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext
+              common_tls_context:
+                tls_params:
+                  tls_minimum_protocol_version: TLSv1_2
+                tls_certificate_sds_secret_configs:
+                  - name: "default"
+                    sds_config:
+                      resource_api_version: V3
+                      api_config_source:
+                        api_type: GRPC
+                        transport_api_version: V3
+                        grpc_services:
+                          - envoy_grpc: { cluster_name: spire_agent }
+                combined_validation_context:
+                  default_validation_context:
+                    match_typed_subject_alt_names:
+                      - san_type: URI
+                        matcher:
+                          exact: "spiffe://spire-rmf.lab/ns/payments/sa/echo-server"
+                  validation_context_sds_secret_config:
+                    name: "spiffe://spire-rmf.lab"
+                    sds_config:
+                      resource_api_version: V3
+                      api_config_source:
+                        api_type: GRPC
+                        transport_api_version: V3
+                        grpc_services:
+                          - envoy_grpc: { cluster_name: spire_agent }
+
+        - name: spire_agent
+          type: STATIC
+          typed_extension_protocol_options:
+            envoy.extensions.upstreams.http.v3.HttpProtocolOptions:
+              "@type": type.googleapis.com/envoy.extensions.upstreams.http.v3.HttpProtocolOptions
+              explicit_http_config:
+                http2_protocol_options: {}
+          load_assignment:
+            cluster_name: spire_agent
+            endpoints:
+              - lb_endpoints:
+                  - endpoint:
+                      address:
+                        pipe:
+                          path: /spiffe-workload-api/spire-agent.sock
+
+    admin:
+      address:
+        socket_address: { address: 127.0.0.1, port_value: 9901 }
+kind: ConfigMap
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","data":{"envoy.yaml":"node:\n  id: echo-client\n  cluster: echo-client\n\nstatic_resources:\n  listeners:\n    - name: local_plain\n      address:\n        socket_address: { address: 127.0.0.1, port_value: 8080 }\n      filter_chains:\n        - filters:\n            - name: envoy.filters.network.http_connection_manager\n              typed_config:\n                \"@type\": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager\n                stat_prefix: egress\n                access_log:\n                  - name: envoy.access_loggers.stdout\n                    typed_config:\n                      \"@type\": type.googleapis.com/envoy.extensions.access_loggers.stream.v3.StdoutAccessLog\n                      log_format:\n                        text_format_source:\n                          inline_string: \"CLIENT upstream=%UPSTREAM_HOST% response=%RESPONSE_CODE% flags=%RESPONSE_FLAGS%\\n\"\n                route_config:\n                  name: local\n                  virtual_hosts:\n                    - name: local\n                      domains: [\"*\"]\n                      routes:\n                        - match: { prefix: \"/\" }\n                          route: { cluster: echo_server_mtls }\n                http_filters:\n                  - name: envoy.filters.http.router\n                    typed_config:\n                      \"@type\": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router\n\n  clusters:\n    - name: echo_server_mtls\n      type: STRICT_DNS\n      connect_timeout: 5s\n      load_assignment:\n        cluster_name: echo_server_mtls\n        endpoints:\n          - lb_endpoints:\n              - endpoint:\n                  address:\n                    socket_address:\n                      address: echo-server.payments.svc.cluster.local\n                      port_value: 8443\n      transport_socket:\n        name: envoy.transport_sockets.tls\n        typed_config:\n          \"@type\": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext\n          common_tls_context:\n            tls_params:\n              tls_minimum_protocol_version: TLSv1_2\n            tls_certificate_sds_secret_configs:\n              - name: \"default\"\n                sds_config:\n                  resource_api_version: V3\n                  api_config_source:\n                    api_type: GRPC\n                    transport_api_version: V3\n                    grpc_services:\n                      - envoy_grpc: { cluster_name: spire_agent }\n            combined_validation_context:\n              default_validation_context:\n                match_typed_subject_alt_names:\n                  - san_type: URI\n                    matcher:\n                      exact: \"spiffe://spire-rmf.lab/ns/payments/sa/echo-server\"\n              validation_context_sds_secret_config:\n                name: \"spiffe://spire-rmf.lab\"\n                sds_config:\n                  resource_api_version: V3\n                  api_config_source:\n                    api_type: GRPC\n                    transport_api_version: V3\n                    grpc_services:\n                      - envoy_grpc: { cluster_name: spire_agent }\n\n    - name: spire_agent\n      type: STATIC\n      typed_extension_protocol_options:\n        envoy.extensions.upstreams.http.v3.HttpProtocolOptions:\n          \"@type\": type.googleapis.com/envoy.extensions.upstreams.http.v3.HttpProtocolOptions\n          explicit_http_config:\n            http2_protocol_options: {}\n      load_assignment:\n        cluster_name: spire_agent\n        endpoints:\n          - lb_endpoints:\n              - endpoint:\n                  address:\n                    pipe:\n                      path: /spiffe-workload-api/spire-agent.sock\n\nadmin:\n  address:\n    socket_address: { address: 127.0.0.1, port_value: 9901 }\n"},"kind":"ConfigMap","metadata":{"annotations":{},"name":"echo-client-envoy","namespace":"payments"}}
+  creationTimestamp: "2026-10-10T23:44:31Z"
+  name: echo-client-envoy
+  namespace: payments
+  resourceVersion: "39436"
+  uid: 2b4d0572-70b3-46ce-82b4-32961c603260

@@ -1,0 +1,163 @@
+# Phase 3: the mTLS server.
+#
+# Envoy terminates TLS using an SVID it fetches over the SPIFFE Workload API
+# through the SDS protocol. No certificate or key is mounted into the pod; the
+# only thing mounted is the agent socket.
+#
+# Three things make this an SC-8 artifact rather than an assertion:
+#   1. require_client_certificate: the server will not accept a connection
+#      without a valid client certificate.
+#   2. match_typed_subject_alt_names: only one specific SPIFFE ID is accepted,
+#      so this is authorisation (AC-3), not just encryption.
+#   3. the access log records the negotiated TLS version, the cipher, and the
+#      peer's URI SAN, which is the evidence an assessor needs.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: echo-server-envoy
+  namespace: payments
+data:
+  envoy.yaml: |
+    node:
+      id: echo-server
+      cluster: echo-server
+
+    static_resources:
+      listeners:
+        - name: mtls_listener
+          address:
+            socket_address: { address: 0.0.0.0, port_value: 8443 }
+          filter_chains:
+            - filters:
+                - name: envoy.filters.network.http_connection_manager
+                  typed_config:
+                    "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
+                    stat_prefix: ingress
+                    access_log:
+                      - name: envoy.access_loggers.stdout
+                        typed_config:
+                          "@type": type.googleapis.com/envoy.extensions.access_loggers.stream.v3.StdoutAccessLog
+                          log_format:
+                            text_format_source:
+                              inline_string: "MTLS peer=%DOWNSTREAM_PEER_URI_SAN% tls_version=%DOWNSTREAM_TLS_VERSION% cipher=%DOWNSTREAM_TLS_CIPHER% subject=%DOWNSTREAM_PEER_SUBJECT% response=%RESPONSE_CODE%\n"
+                    route_config:
+                      name: local
+                      virtual_hosts:
+                        - name: local
+                          domains: ["*"]
+                          routes:
+                            - match: { prefix: "/" }
+                              direct_response:
+                                status: 200
+                                body:
+                                  inline_string: "hello over mTLS from echo-server\n"
+                    http_filters:
+                      - name: envoy.filters.http.router
+                        typed_config:
+                          "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
+              transport_socket:
+                name: envoy.transport_sockets.tls
+                typed_config:
+                  "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.DownstreamTlsContext
+                  require_client_certificate: true
+                  common_tls_context:
+                    tls_params:
+                      tls_minimum_protocol_version: TLSv1_2
+                    tls_certificate_sds_secret_configs:
+                      - name: "default"
+                        sds_config:
+                          resource_api_version: V3
+                          api_config_source:
+                            api_type: GRPC
+                            transport_api_version: V3
+                            grpc_services:
+                              - envoy_grpc: { cluster_name: spire_agent }
+                    combined_validation_context:
+                      default_validation_context:
+                        # Authorisation: only this exact SPIFFE ID may connect.
+                        match_typed_subject_alt_names:
+                          - san_type: URI
+                            matcher:
+                              exact: "spiffe://spire-rmf.lab/ns/payments/sa/echo-client"
+                      validation_context_sds_secret_config:
+                        name: "spiffe://spire-rmf.lab"
+                        sds_config:
+                          resource_api_version: V3
+                          api_config_source:
+                            api_type: GRPC
+                            transport_api_version: V3
+                            grpc_services:
+                              - envoy_grpc: { cluster_name: spire_agent }
+
+      clusters:
+        - name: spire_agent
+          type: STATIC
+          typed_extension_protocol_options:
+            envoy.extensions.upstreams.http.v3.HttpProtocolOptions:
+              "@type": type.googleapis.com/envoy.extensions.upstreams.http.v3.HttpProtocolOptions
+              explicit_http_config:
+                http2_protocol_options: {}
+          load_assignment:
+            cluster_name: spire_agent
+            endpoints:
+              - lb_endpoints:
+                  - endpoint:
+                      address:
+                        pipe:
+                          path: /spiffe-workload-api/spire-agent.sock
+
+    admin:
+      address:
+        socket_address: { address: 127.0.0.1, port_value: 9901 }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echo-server
+  namespace: payments
+  labels:
+    app: echo-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: echo-server
+  template:
+    metadata:
+      labels:
+        app: echo-server
+    spec:
+      serviceAccountName: echo-server
+      containers:
+        - name: envoy
+          image: 401352756244.dkr.ecr.us-east-1.amazonaws.com/envoyproxy/envoy:v1.31.5
+          args: ["-c", "/etc/envoy/envoy.yaml", "-l", "info"]
+          ports:
+            - containerPort: 8443
+          volumeMounts:
+            - name: envoy-config
+              mountPath: /etc/envoy
+              readOnly: true
+            - name: spiffe-workload-api
+              mountPath: /spiffe-workload-api
+              readOnly: true
+      volumes:
+        - name: envoy-config
+          configMap:
+            name: echo-server-envoy
+        - name: spiffe-workload-api
+          csi:
+            driver: csi.spiffe.io
+            readOnly: true
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: echo-server
+  namespace: payments
+spec:
+  selector:
+    app: echo-server
+  ports:
+    - port: 8443
+      targetPort: 8443

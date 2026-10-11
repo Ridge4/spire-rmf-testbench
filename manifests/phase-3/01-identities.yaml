@@ -1,0 +1,46 @@
+# Phase 3: identities for the two mTLS peers.
+#
+# Separate service accounts from the Phase 2 workloads, so the handshake is
+# between two identities whose SPIFFE IDs are visibly derived from their own
+# service accounts rather than shared.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: echo-server
+  namespace: payments
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: echo-client
+  namespace: payments
+---
+apiVersion: spire.spiffe.io/v1alpha1
+kind: ClusterSPIFFEID
+metadata:
+  name: echo-server
+spec:
+  className: spire-server-spire
+  spiffeIDTemplate: "spiffe://{{ .TrustDomain }}/ns/{{ .PodMeta.Namespace }}/sa/{{ .PodSpec.ServiceAccountName }}"
+  namespaceSelector:
+    matchLabels:
+      spiffe.io/spiffe-id: "true"
+  podSelector:
+    matchLabels:
+      app: echo-server
+  ttl: 1h
+---
+apiVersion: spire.spiffe.io/v1alpha1
+kind: ClusterSPIFFEID
+metadata:
+  name: echo-client
+spec:
+  className: spire-server-spire
+  spiffeIDTemplate: "spiffe://{{ .TrustDomain }}/ns/{{ .PodMeta.Namespace }}/sa/{{ .PodSpec.ServiceAccountName }}"
+  namespaceSelector:
+    matchLabels:
+      spiffe.io/spiffe-id: "true"
+  podSelector:
+    matchLabels:
+      app: echo-client
+  ttl: 1h

@@ -1,0 +1,163 @@
+# Phase 3: the mTLS negative test.
+#
+# A client in the unauthorized namespace, configured exactly like echo-client
+# except that no ClusterSPIFFEID selects it, so SDS never delivers a
+# certificate. Envoy therefore cannot present a client certificate, and the
+# server's require_client_certificate rejects the connection.
+#
+# This distinguishes "traffic is encrypted" from "only authorised peers can
+# connect", which is the difference between SC-8 alone and SC-8 with AC-3.
+#
+# A second, sharper case is described in docs/phase-3-notes.md: an authorised
+# workload with a VALID SVID whose SPIFFE ID is not in the server's
+# match_typed_subject_alt_names list is also rejected. That proves the
+# authorisation decision is based on identity, not merely on possessing any
+# certificate from the trust domain.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rogue-client-envoy
+  namespace: unauthorized
+data:
+  envoy.yaml: |
+    node:
+      id: rogue-client
+      cluster: rogue-client
+
+    static_resources:
+      listeners:
+        - name: local_plain
+          address:
+            socket_address: { address: 127.0.0.1, port_value: 8080 }
+          filter_chains:
+            - filters:
+                - name: envoy.filters.network.http_connection_manager
+                  typed_config:
+                    "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
+                    stat_prefix: egress
+                    access_log:
+                      - name: envoy.access_loggers.stdout
+                        typed_config:
+                          "@type": type.googleapis.com/envoy.extensions.access_loggers.stream.v3.StdoutAccessLog
+                          log_format:
+                            text_format_source:
+                              inline_string: "ROGUE upstream=%UPSTREAM_HOST% response=%RESPONSE_CODE% flags=%RESPONSE_FLAGS%\n"
+                    route_config:
+                      name: local
+                      virtual_hosts:
+                        - name: local
+                          domains: ["*"]
+                          routes:
+                            - match: { prefix: "/" }
+                              route: { cluster: echo_server_mtls }
+                    http_filters:
+                      - name: envoy.filters.http.router
+                        typed_config:
+                          "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
+
+      clusters:
+        - name: echo_server_mtls
+          type: STRICT_DNS
+          connect_timeout: 5s
+          load_assignment:
+            cluster_name: echo_server_mtls
+            endpoints:
+              - lb_endpoints:
+                  - endpoint:
+                      address:
+                        socket_address:
+                          address: echo-server.payments.svc.cluster.local
+                          port_value: 8443
+          transport_socket:
+            name: envoy.transport_sockets.tls
+            typed_config:
+              "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext
+              common_tls_context:
+                tls_certificate_sds_secret_configs:
+                  - name: "default"
+                    sds_config:
+                      resource_api_version: V3
+                      api_config_source:
+                        api_type: GRPC
+                        transport_api_version: V3
+                        grpc_services:
+                          - envoy_grpc: { cluster_name: spire_agent }
+                validation_context_sds_secret_config:
+                  name: "spiffe://spire-rmf.lab"
+                  sds_config:
+                    resource_api_version: V3
+                    api_config_source:
+                      api_type: GRPC
+                      transport_api_version: V3
+                      grpc_services:
+                        - envoy_grpc: { cluster_name: spire_agent }
+
+        - name: spire_agent
+          type: STATIC
+          typed_extension_protocol_options:
+            envoy.extensions.upstreams.http.v3.HttpProtocolOptions:
+              "@type": type.googleapis.com/envoy.extensions.upstreams.http.v3.HttpProtocolOptions
+              explicit_http_config:
+                http2_protocol_options: {}
+          load_assignment:
+            cluster_name: spire_agent
+            endpoints:
+              - lb_endpoints:
+                  - endpoint:
+                      address:
+                        pipe:
+                          path: /spiffe-workload-api/spire-agent.sock
+
+    admin:
+      address:
+        socket_address: { address: 127.0.0.1, port_value: 9901 }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rogue-client
+  namespace: unauthorized
+  labels:
+    app: rogue-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rogue-client
+  template:
+    metadata:
+      labels:
+        app: rogue-client
+    spec:
+      serviceAccountName: rogue
+      containers:
+        - name: envoy
+          image: 401352756244.dkr.ecr.us-east-1.amazonaws.com/envoyproxy/envoy:v1.31.5
+          args: ["-c", "/etc/envoy/envoy.yaml", "-l", "info"]
+          volumeMounts:
+            - name: envoy-config
+              mountPath: /etc/envoy
+              readOnly: true
+            - name: spiffe-workload-api
+              mountPath: /spiffe-workload-api
+              readOnly: true
+        - name: curl
+          image: 401352756244.dkr.ecr.us-east-1.amazonaws.com/curlimages/curl:8.11.1
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              sleep 20
+              while true; do
+                echo "--- $(date -u) --- attempting connection (expected to fail)"
+                curl -sS -o - -w "\nHTTP %{http_code}\n" --max-time 10 http://127.0.0.1:8080/ \
+                  || echo "DENIED: no client certificate available, connection rejected"
+                sleep 60
+              done
+      volumes:
+        - name: envoy-config
+          configMap:
+            name: rogue-client-envoy
+        - name: spiffe-workload-api
+          csi:
+            driver: csi.spiffe.io
+            readOnly: true
