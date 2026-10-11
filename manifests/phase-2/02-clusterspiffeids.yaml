@@ -2,7 +2,7 @@
 #
 # These replace the chart's built-in "default" ClusterSPIFFEID, which ships with
 # empty podSelector and namespaceSelector and therefore matches every pod in
-# every namespace. That default is disabled in helm/phase-1/spire-values.yaml.
+# every namespace. That default is disabled in helm/spire-values.yaml.
 #
 # Each identity below is constrained three ways:
 #   - namespaceSelector  : only the payments namespace

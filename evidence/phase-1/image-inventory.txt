@@ -1,0 +1,51 @@
+Image inventory: all namespaces
+Generated: Sun Oct 11 14:41:33 UTC 2026
+Private registry: 401352756244.dkr.ecr.us-east-1.amazonaws.com
+
+=== All images in use (16) ===
+  401352756244.dkr.ecr.us-east-1.amazonaws.com/aws-observability/aws-for-fluent-bit:2.32.5
+  401352756244.dkr.ecr.us-east-1.amazonaws.com/chainguard/bash:latest
+  401352756244.dkr.ecr.us-east-1.amazonaws.com/curlimages/curl:8.11.1
+  401352756244.dkr.ecr.us-east-1.amazonaws.com/envoyproxy/envoy:v1.31.5
+  401352756244.dkr.ecr.us-east-1.amazonaws.com/library/busybox:1.37.0-uclibc
+  401352756244.dkr.ecr.us-east-1.amazonaws.com/sig-storage/csi-node-driver-registrar:v2.15.0
+  401352756244.dkr.ecr.us-east-1.amazonaws.com/spiffe/spiffe-csi-driver:0.2.7
+  401352756244.dkr.ecr.us-east-1.amazonaws.com/spiffe/spire-agent:1.15.3
+  401352756244.dkr.ecr.us-east-1.amazonaws.com/spiffe/spire-controller-manager:0.8.0
+  401352756244.dkr.ecr.us-east-1.amazonaws.com/spiffe/spire-server:1.15.3
+  602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni-init:v1.22.4-eksbuild.3
+  602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni:v1.22.4-eksbuild.3
+  602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon/aws-network-policy-agent:v1.4.0-eksbuild.1
+  602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/coredns:v1.12.4-eksbuild.57
+  602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/eks-pod-identity-agent:v0.1.37
+  602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/kube-proxy:v1.33.10-eksbuild.29
+
+=== Mirrored into this account (10) ===
+  401352756244.dkr.ecr.us-east-1.amazonaws.com/aws-observability/aws-for-fluent-bit:2.32.5
+  401352756244.dkr.ecr.us-east-1.amazonaws.com/chainguard/bash:latest
+  401352756244.dkr.ecr.us-east-1.amazonaws.com/curlimages/curl:8.11.1
+  401352756244.dkr.ecr.us-east-1.amazonaws.com/envoyproxy/envoy:v1.31.5
+  401352756244.dkr.ecr.us-east-1.amazonaws.com/library/busybox:1.37.0-uclibc
+  401352756244.dkr.ecr.us-east-1.amazonaws.com/sig-storage/csi-node-driver-registrar:v2.15.0
+  401352756244.dkr.ecr.us-east-1.amazonaws.com/spiffe/spiffe-csi-driver:0.2.7
+  401352756244.dkr.ecr.us-east-1.amazonaws.com/spiffe/spire-agent:1.15.3
+  401352756244.dkr.ecr.us-east-1.amazonaws.com/spiffe/spire-controller-manager:0.8.0
+  401352756244.dkr.ecr.us-east-1.amazonaws.com/spiffe/spire-server:1.15.3
+
+=== AWS-managed registries (6) ===
+  602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni-init:v1.22.4-eksbuild.3
+  602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni:v1.22.4-eksbuild.3
+  602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon/aws-network-policy-agent:v1.4.0-eksbuild.1
+  602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/coredns:v1.12.4-eksbuild.57
+  602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/eks-pod-identity-agent:v0.1.37
+  602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/kube-proxy:v1.33.10-eksbuild.29
+
+  Served over the ECR interface endpoints, so these pull without an
+  internet route and do not need mirroring. They remain supply-chain
+  inputs that an ATO package has to account for.
+
+=== External registries (0) ===
+  none: nothing running depends on a registry outside AWS
+
+=== Pods unable to pull an image ===
+  none

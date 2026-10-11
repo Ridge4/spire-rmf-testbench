@@ -23,12 +23,23 @@ to close the evidence gaps that report identified.
 ## Layout
 
 ```
-terraform/   infrastructure (Phase 0 onward)
-helm/        SPIRE values files, per phase
-manifests/   ClusterSPIFFEID resources and test workloads
-evidence/    captured artifacts, organized by phase
-docs/        build notes and findings
+terraform/        infrastructure: VPC, EKS, RDS, KMS, logging
+helm/             SPIRE chart values (one release, upgraded in place)
+manifests/        per-phase Kubernetes resources
+  phase-2/          namespaces, scoped ClusterSPIFFEIDs, test workloads
+  phase-3/          Envoy mTLS peers and the negative test
+  phase-4/          Fluent Bit log shipper
+scripts/          operational helpers
+  connect.sh        SSM tunnel, kubeconfig, datastore secret
+  mirror-images.sh  copy container images into ECR
+  pre-destroy-cleanup.sh  orphaned ENIs and SPIRE-created KMS keys
+evidence/         captured artifacts, organized by phase
+docs/             build notes and findings
 ```
+
+`helm/spire-values.yaml` is a single file rather than one per phase: there is
+one SPIRE release and later phases upgrade it in place. Comments in the file
+mark which settings belong to which phase.
 
 `evidence/` is the point of the repository. Each phase deposits the logs and
 configuration that the paper cites, so a reviewer can trace every claim back to
@@ -50,11 +61,25 @@ Run Terraform **from your workstation**, not from the in-VPC jump host. See
 `docs/phase-0-dns.md` for why that matters; it is the compliant replacement for
 the public-resolver workaround used in the original build.
 
-Connect to the jump host:
+## Connecting to the cluster
+
+The API endpoint is private, so kubectl reaches it through an SSM port forward.
+`scripts/connect.sh` reads everything from Terraform state, so nothing needs to
+be remembered or pasted after a rebuild even though the endpoint hostname
+changes each time.
 
 ```bash
-aws ssm start-session --target $(terraform output -raw jump_host_id)
+./scripts/connect.sh tunnel       # terminal 1: start the tunnel, leave it running
+./scripts/connect.sh kubeconfig   # terminal 2: point kubectl at the tunnel
+./scripts/connect.sh secret       # recreate the SPIRE datastore secret
 ```
+
+Other subcommands: `check` (is the cluster reachable), `shell` (a shell on the
+jump host), `info` (print cluster facts). Run with no arguments for usage.
+
+SSM sessions time out when idle, and any long helm command will fail with a TLS
+handshake timeout when that happens. `./scripts/connect.sh check` before
+starting one is the cheap habit.
 
 Tear down when not actively working. EKS bills for the control plane hourly,
 and the interface endpoints are billed per hour per availability zone.

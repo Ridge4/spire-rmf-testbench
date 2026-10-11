@@ -83,8 +83,11 @@ one crash at a time:
 | busybox | `spire-server.chown.image` and `.tools.busybox.image` | server init container crash |
 | chainguard/bash | `spire-agent.fsGroupFix.image` and `.socketAlternate.image` | agent init container crash |
 
-The reliable method is to install, then read `kubectl describe pod` for every
-workload and collect the image list from there. For the paper: an air-gapped
+The reliable method is to install, then read the image list from the running
+pods. `scripts/image-inventory.sh` does that: it reads every pod spec including
+init and ephemeral containers, and reports which images are not being served
+from the account's own registry. In an air-gapped deployment that second list
+is the one that has to be empty. For the paper: an air-gapped
 deployment cannot work out its image dependencies from the chart alone. Plan for
 several install-and-fail cycles, or mirror every image the chart references
 whether or not it appears to be used.
@@ -125,6 +128,8 @@ would fail unless those are mirrored and overridden too.
 ## Evidence
 
 - `image-pull-failure.txt` - kubelet timeouts before mirroring
-- `image-mirror-map.txt` - source to ECR mapping
+- `image-mirror-map.txt` - cumulative source-to-ECR mapping across all phases
+- `image-inventory.txt` - images in use, taken from running pods rather than
+  chart templates, with anything not served from ECR called out
 - `ecr-repositories.json` - the mirrored repositories
 - `pods-running-after-mirror.txt` - all pods running from ECR

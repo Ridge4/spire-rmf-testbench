@@ -1,0 +1,35 @@
+=== clean-room rebuild, Sun Oct 11 14:40:22 UTC 2026 ===
+Full stack from terraform apply to working mTLS, no manual intervention
+
+--- scoped identities (AC-6) ---
+rpc error: code = PermissionDenied desc = no identity issued
+rpc error: code = PermissionDenied desc = no identity issued
+Received 1 svid after 7.038792443s
+
+SPIFFE ID:		spiffe://spire-rmf.lab/ns/payments/sa/api
+SVID Valid After:	2026-10-11 14:39:02 +0000 UTC
+SVID Valid Until:	2026-10-11 15:39:12 +0000 UTC
+CA #1 Valid After:	2026-10-11 14:34:13 +0000 UTC
+CA #1 Valid Until:	2026-10-12 14:34:23 +0000 UTC
+
+rpc error: code = PermissionDenied desc = no identity issued
+Received 1 svid after 2.040634194s
+
+SPIFFE ID:		spiffe://spire-rmf.lab/ns/payments/sa/db-client
+SVID Valid After:	2026-10-11 14:38:57 +0000 UTC
+SVID Valid Until:	2026-10-11 15:39:07 +0000 UTC
+CA #1 Valid After:	2026-10-11 14:34:13 +0000 UTC
+CA #1 Valid Until:	2026-10-12 14:34:23 +0000 UTC
+
+--- denial (AC-6 negative) ---
+rpc error: code = PermissionDenied desc = no identity issued
+rpc error: code = PermissionDenied desc = no identity issued
+rpc error: code = PermissionDenied desc = no identity issued
+rpc error: code = PermissionDenied desc = no identity issued
+rpc error: code = PermissionDenied desc = no identity issued
+--- mTLS (SC-8) ---
+MTLS peer=spiffe://spire-rmf.lab/ns/payments/sa/echo-client tls_version=TLSv1.2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 subject=O=SPIRE,C=US response=200
+MTLS peer=spiffe://spire-rmf.lab/ns/payments/sa/echo-client tls_version=TLSv1.2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 subject=O=SPIRE,C=US response=200
+MTLS peer=spiffe://spire-rmf.lab/ns/payments/sa/echo-client tls_version=TLSv1.2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 subject=O=SPIRE,C=US response=200
+MTLS peer=spiffe://spire-rmf.lab/ns/payments/sa/echo-client tls_version=TLSv1.2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 subject=O=SPIRE,C=US response=200
+MTLS peer=spiffe://spire-rmf.lab/ns/payments/sa/echo-client tls_version=TLSv1.2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 subject=O=SPIRE,C=US response=200

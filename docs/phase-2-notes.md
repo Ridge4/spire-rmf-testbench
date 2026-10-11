@@ -43,7 +43,7 @@ it was running a configuration that granted identity indiscriminately.
 
 ```bash
 helm upgrade spire spiffe/spire -n spire-server \
-  --version 0.30.3 --values helm/phase-1/spire-values.yaml
+  --version 0.30.3 --values helm/spire-values.yaml
 
 kubectl apply -f manifests/phase-2/01-namespaces.yaml
 kubectl apply -f manifests/phase-2/02-clusterspiffeids.yaml

@@ -7,7 +7,7 @@
 # Every image key below was read from the chart's own values files at 0.30.3,
 # not guessed. Verify after any chart bump:
 #   helm template spire spiffe/spire --version 0.30.3 \
-#     --values helm/phase-1/spire-values.yaml \
+#     --values helm/spire-values.yaml \
 #     | grep -oE 'image: .*' | sort -u
 #
 # busybox and cgr.dev/chainguard images still render upstream. They appear only

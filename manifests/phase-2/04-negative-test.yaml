@@ -33,16 +33,12 @@ spec:
       containers:
         - name: workload
           image: 401352756244.dkr.ecr.us-east-1.amazonaws.com/spiffe/spire-agent:1.15.3
-          command: ["/bin/sh", "-c"]
+          command: ["/opt/spire/bin/spire-agent"]
           args:
-            - |
-              while true; do
-                echo "=== $(date -u) === attempting fetch (expected to fail)"
-                /opt/spire/bin/spire-agent api fetch x509 \
-                  -socketPath /spiffe-workload-api/spire-agent.sock || \
-                  echo "DENIED: no identity issued to this workload"
-                sleep 300
-              done
+            - "api"
+            - "watch"
+            - "-socketPath"
+            - "/spiffe-workload-api/spire-agent.sock"
           volumeMounts:
             - name: spiffe-workload-api
               mountPath: /spiffe-workload-api

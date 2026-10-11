@@ -1,4 +1,26 @@
 #!/usr/bin/env bash
+#
+# Mirror the SPIRE chart's container images into ECR.
+#
+# The Private Only cluster cannot reach ghcr.io, registry.k8s.io, docker.io or
+# cgr.dev. Rather than open egress, images are copied into the account's own ECR
+# registry, which the cluster already reaches over the interface endpoints
+# created in Phase 0. This is the same pattern a real air-gapped federal
+# deployment uses.
+#
+# Run from your WORKSTATION (needs internet + AWS credentials), not the jump host.
+#
+# Requires: aws CLI, and either crane (preferred) or docker.
+#   crane: https://github.com/google/go-containerregistry  (no daemon needed)
+#
+# Usage:
+#   ./scripts/mirror-images.sh                 # mirror the default list
+#   ./scripts/mirror-images.sh images.txt      # mirror a list you rendered
+#
+# Produce a list from the chart like this:
+#   helm template spire spiffe/spire --version 0.30.3 \
+#     --values helm/spire-values.yaml \
+#     | grep -oE 'image: .*' | tr -d '"' | awk '{print $2}' | sort -u > images.txt
 
 set -euo pipefail
 
@@ -77,9 +99,15 @@ tag_for() {
   [[ "$ref" == *:* ]] && echo "${ref##*:}" || echo "latest"
 }
 
-MAPPING_FILE="evidence/phase-1/image-mirror-map.txt"
+# The mapping is a cumulative inventory, not a per-run artifact. Images arrive
+# across several phases (SPIRE in phase 1, Envoy and curl in phase 3, Fluent Bit
+# in phase 4), and the complete list of what an air-gapped deployment must
+# mirror is one of this repository's findings. Appending, and de-duplicating at
+# the end, keeps the whole inventory in one place instead of each run clobbering
+# the last.
+MAPPING_FILE="${MAPPING_FILE:-evidence/image-mirror-map.txt}"
 mkdir -p "$(dirname "$MAPPING_FILE")"
-: > "$MAPPING_FILE"
+touch "$MAPPING_FILE"
 
 for src in "${IMAGES[@]}"; do
   [[ -z "$src" ]] && continue
@@ -105,40 +133,24 @@ for src in "${IMAGES[@]}"; do
     docker push "$dst"
   fi
 
-  printf '%s -> %s\n' "$src" "$dst" >> "$MAPPING_FILE"
+  printf '%-72s -> %s\n' "$src" "$dst" >> "$MAPPING_FILE"
 done
 
+# De-duplicate in place, keeping the file sorted so diffs between runs are
+# readable and re-mirroring the same image does not add a second line.
+sort -u -o "$MAPPING_FILE" "$MAPPING_FILE"
+
 echo
-echo "Done. Mapping written to ${MAPPING_FILE}"
+echo "Mirrored ${#IMAGES[@]} image(s)."
+echo "Cumulative inventory: ${MAPPING_FILE} ($(grep -c . "$MAPPING_FILE") images total)"
 echo
-echo "Add to helm/phase-1/spire-values.yaml (adjust keys to the chart's schema):"
-cat <<EOF
-
-global:
-  spire:
-    image:
-      registry: ${ECR}
-
-spire-server:
-  image:
-    registry: ${ECR}
-    repository: spiffe/spire-server
-  controllerManager:
-    image:
-      registry: ${ECR}
-      repository: spiffe/spire-controller-manager
-
-spire-agent:
-  image:
-    registry: ${ECR}
-    repository: spiffe/spire-agent
-
-spiffe-csi-driver:
-  image:
-    registry: ${ECR}
-    repository: spiffe/spiffe-csi-driver
-  nodeDriverRegistrar:
-    image:
-      registry: ${ECR}
-      repository: sig-storage/csi-node-driver-registrar
-EOF
+echo "Chart images are overridden in helm/spire-values.yaml. Workload images are"
+echo "referenced directly in manifests/. After any chart or image change, confirm"
+echo "nothing still points upstream:"
+echo
+echo "  helm template spire spiffe/spire --version 0.30.3 \\"
+echo "    --values helm/spire-values.yaml | grep -oE 'image: .*' | sort -u"
+echo
+echo "Note that this undercounts: init-container and tools images do not always"
+echo "render as 'image:' lines. The reliable inventory comes from describing the"
+echo "running pods. See docs/phase-1-images.md."

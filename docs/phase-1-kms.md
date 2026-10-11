@@ -59,7 +59,7 @@ Set the key policy explicitly rather than accepting the plugin default. The
 policy must grant the account root full administrative access, which is the
 recovery path, and grant the SPIRE role only the operations it needs. Both are
 granted by ARN, which re-resolves correctly after a role is recreated. See
-`keyManager.awsKMS.keyPolicy.policy` in `helm/phase-1/spire-values.yaml`.
+`keyManager.awsKMS.keyPolicy.policy` in `helm/spire-values.yaml`.
 
 ## 2. The lockout safety check requires kms:PutKeyPolicy
 

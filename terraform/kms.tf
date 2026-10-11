@@ -70,7 +70,7 @@ resource "aws_iam_role_policy" "spire_server_kms" {
           "kms:DeleteAlias",
           "kms:ScheduleKeyDeletion",
           # Required by the KMS lockout safety check when the plugin creates a
-          # key with a custom key policy (see helm/phase-1/spire-values.yaml).
+          # key with a custom key policy (see helm/spire-values.yaml).
           "kms:PutKeyPolicy",
         ]
         Resource = "*"

@@ -29,7 +29,7 @@ does not require an OIDC provider, which keeps the Private Only story simpler.
 1. `terraform apply` for `rds.tf` and `kms.tf`. RDS takes 5-10 minutes.
 2. Create the namespace and the datastore secret.
 3. Mirror images to ECR (see `phase-1-images.md`).
-4. `helm install` with `helm/phase-1/spire-values.yaml`.
+4. `helm install` with `helm/spire-values.yaml`.
 5. Capture evidence while the cluster is running.
 
 ### Namespace and secret
@@ -55,7 +55,7 @@ or in the Helm command line.
 ```bash
 helm install spire-crds spiffe/spire-crds -n spire-server --version 0.6.1
 helm install spire spiffe/spire -n spire-server \
-  --version 0.30.3 --values helm/phase-1/spire-values.yaml
+  --version 0.30.3 --values helm/spire-values.yaml
 ```
 
 ## Results
