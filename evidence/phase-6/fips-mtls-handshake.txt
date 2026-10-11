@@ -1,0 +1,3 @@
+2026/10/11 20:24:05 FIPS 140-3 mode: true
+2026/10/11 20:24:07 MTLS peer=spiffe://spire-rmf.lab/ns/payments/sa/fips-echo-client tls_version=TLS 1.3 cipher=TLS_AES_128_GCM_SHA256 fips=true
+2026/10/11 20:25:07 MTLS peer=spiffe://spire-rmf.lab/ns/payments/sa/fips-echo-client tls_version=TLS 1.3 cipher=TLS_AES_128_GCM_SHA256 fips=true

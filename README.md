@@ -19,6 +19,7 @@ to close the evidence gaps that report identified.
 | 3 | Live mTLS via Envoy SDS, identity-based authorisation | SC-8, AC-3 | in progress |
 | 4 | Telemetry to CloudWatch, metric filters, denial alarm | AU-2, AU-3, AU-9 | done |
 | 5 | FIPS 140-3 investigation: validated module for SPIRE, gap for Envoy | SC-13 | documented |
+| 6 | mTLS on the validated Go module, no proxy; wrong-identity test | SC-13, SC-8, AC-3 | done |
 
 ## Layout
 
@@ -29,12 +30,15 @@ manifests/        per-phase Kubernetes resources
   phase-2/          namespaces, scoped ClusterSPIFFEIDs, test workloads
   phase-3/          Envoy mTLS peers and the negative test
   phase-4/          Fluent Bit log shipper
+  phase-6/          go-spiffe FIPS workloads and the wrong-identity test
+fips-workloads/   go-spiffe client and server, built with GOFIPS140
 scripts/          operational helpers
   connect.sh        SSM tunnel, kubeconfig, datastore secret
   mirror-images.sh  copy container images into ECR
   image-inventory.sh      what is actually running, and what is not mirrored
   fips-check.sh           what cryptography the running binaries link
   phase0-evidence.sh      boundary evidence, inside and outside the enclave
+  build-fips-workloads.sh build the go-spiffe workloads on the validated module
   pre-destroy-cleanup.sh  orphaned ENIs and SPIRE-created KMS keys
 evidence/         captured artifacts, organized by phase
 docs/             build notes and findings

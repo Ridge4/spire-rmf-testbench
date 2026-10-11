@@ -1,0 +1,97 @@
+# Phase 6: mTLS without a proxy, on the validated Go module.
+#
+# Compare with manifests/phase-3/. There the application spoke plain HTTP to a
+# localhost Envoy, which held the identity and did the cryptography. Here the
+# application holds its own SVID and performs the handshake itself, so nothing
+# sits inside the cryptographic boundary except the workload.
+#
+# Replace 401352756244 before applying.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fips-echo-server
+  namespace: payments
+  labels:
+    app: fips-echo-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fips-echo-server
+  template:
+    metadata:
+      labels:
+        app: fips-echo-server
+    spec:
+      serviceAccountName: fips-echo-server
+      containers:
+        - name: server
+          image: 401352756244.dkr.ecr.us-east-1.amazonaws.com/fips/echo-server:v1
+          env:
+            # Authorisation is on the peer's SPIFFE ID, exactly as the Envoy
+            # match_typed_subject_alt_names did in Phase 3.
+            - name: AUTHORIZED_CLIENT_ID
+              value: "spiffe://spire-rmf.lab/ns/payments/sa/fips-echo-client"
+            - name: LISTEN_ADDR
+              value: ":8443"
+          ports:
+            - containerPort: 8443
+          volumeMounts:
+            - name: spiffe-workload-api
+              mountPath: /spiffe-workload-api
+              readOnly: true
+      volumes:
+        - name: spiffe-workload-api
+          csi:
+            driver: csi.spiffe.io
+            readOnly: true
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fips-echo-server
+  namespace: payments
+spec:
+  selector:
+    app: fips-echo-server
+  ports:
+    - port: 8443
+      targetPort: 8443
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fips-echo-client
+  namespace: payments
+  labels:
+    app: fips-echo-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fips-echo-client
+  template:
+    metadata:
+      labels:
+        app: fips-echo-client
+    spec:
+      serviceAccountName: fips-echo-client
+      containers:
+        - name: client
+          image: 401352756244.dkr.ecr.us-east-1.amazonaws.com/fips/echo-client:v1
+          env:
+            - name: AUTHORIZED_SERVER_ID
+              value: "spiffe://spire-rmf.lab/ns/payments/sa/fips-echo-server"
+            - name: TARGET_URL
+              value: "https://fips-echo-server.payments.svc.cluster.local:8443/"
+            - name: REQUEST_INTERVAL
+              value: "60s"
+          volumeMounts:
+            - name: spiffe-workload-api
+              mountPath: /spiffe-workload-api
+              readOnly: true
+      volumes:
+        - name: spiffe-workload-api
+          csi:
+            driver: csi.spiffe.io
+            readOnly: true

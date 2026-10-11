@@ -1,0 +1,55 @@
+=== FIPS workload build record ===
+date:       Sun Oct 11 20:21:12 UTC 2026
+go version: 1.25
+GOFIPS140:  v1.0.0
+
+--- echo-server ---
+/out/app: go1.25.14
+	path	github.com/Ridge4/spire-rmf-testbench/fips-workloads/server
+	mod	github.com/Ridge4/spire-rmf-testbench/fips-workloads	(devel)	
+	dep	github.com/go-jose/go-jose/v4	v4.0.4	h1:VsjPI33J0SB9vQM6PLmNjoHqMQNGPiZ0rHL7Ni7Q6/E=
+	dep	github.com/spiffe/go-spiffe/v2	v2.5.0	h1:N2I01KCUkv1FAjZXJMwh95KK1ZIQLYbPfhaxw8WS0hE=
+	dep	github.com/zeebo/errs	v1.4.0	h1:XNdoD/RRMKP7HD0UhJnIzUy74ISdGGxURlYG8HSWSfM=
+	dep	golang.org/x/crypto	v0.31.0	h1:ihbySMvVjLAeSH1IbfcRTkD/iNscyz8rGzjF/E5hV6U=
+	dep	golang.org/x/net	v0.33.0	h1:74SYHlV8BIgHIFC/LrYkOGIwL19eTYXQ5wc6TBuO36I=
+	dep	golang.org/x/sys	v0.28.0	h1:Fksou7UEQUWlKvIdsqzJmUmCX3cZuD2+P3XyyzwMhlA=
+	dep	golang.org/x/text	v0.21.0	h1:zyQAAkrwaneQ066sspRyJaG9VNi/YJ1NfzcGB3hZ/qo=
+	dep	google.golang.org/genproto/googleapis/rpc	v0.0.0-20241202173237-19429a94021a	h1:hgh8P4EuoxpsuKMXX/To36nOFD7vixReXgn8lPGnt+o=
+	dep	google.golang.org/grpc	v1.70.0	h1:pWFv03aZoHzlRKHWicjsZytKAiYCtNS0dHbXnIdq7jQ=
+	dep	google.golang.org/protobuf	v1.36.1	h1:yBPeRvTftaleIgM3PZ/WBIZ7XM/eEYAaEyCwvyjq/gk=
+	build	-buildmode=exe
+	build	-compiler=gc
+	build	-tags=fips140v1.0
+	build	-trimpath=true
+	build	DefaultGODEBUG=containermaxprocs=0,decoratemappings=0,fips140=on,tlssha1=1,updatemaxprocs=0,x509sha256skid=0
+	build	CGO_ENABLED=0
+	build	GOARCH=amd64
+	build	GOFIPS140=v1.0.0-c2097c7c
+	build	GOOS=linux
+	build	GOAMD64=v1
+
+--- echo-client ---
+/out/app: go1.25.14
+	path	github.com/Ridge4/spire-rmf-testbench/fips-workloads/client
+	mod	github.com/Ridge4/spire-rmf-testbench/fips-workloads	(devel)	
+	dep	github.com/go-jose/go-jose/v4	v4.0.4	h1:VsjPI33J0SB9vQM6PLmNjoHqMQNGPiZ0rHL7Ni7Q6/E=
+	dep	github.com/spiffe/go-spiffe/v2	v2.5.0	h1:N2I01KCUkv1FAjZXJMwh95KK1ZIQLYbPfhaxw8WS0hE=
+	dep	github.com/zeebo/errs	v1.4.0	h1:XNdoD/RRMKP7HD0UhJnIzUy74ISdGGxURlYG8HSWSfM=
+	dep	golang.org/x/crypto	v0.31.0	h1:ihbySMvVjLAeSH1IbfcRTkD/iNscyz8rGzjF/E5hV6U=
+	dep	golang.org/x/net	v0.33.0	h1:74SYHlV8BIgHIFC/LrYkOGIwL19eTYXQ5wc6TBuO36I=
+	dep	golang.org/x/sys	v0.28.0	h1:Fksou7UEQUWlKvIdsqzJmUmCX3cZuD2+P3XyyzwMhlA=
+	dep	golang.org/x/text	v0.21.0	h1:zyQAAkrwaneQ066sspRyJaG9VNi/YJ1NfzcGB3hZ/qo=
+	dep	google.golang.org/genproto/googleapis/rpc	v0.0.0-20241202173237-19429a94021a	h1:hgh8P4EuoxpsuKMXX/To36nOFD7vixReXgn8lPGnt+o=
+	dep	google.golang.org/grpc	v1.70.0	h1:pWFv03aZoHzlRKHWicjsZytKAiYCtNS0dHbXnIdq7jQ=
+	dep	google.golang.org/protobuf	v1.36.1	h1:yBPeRvTftaleIgM3PZ/WBIZ7XM/eEYAaEyCwvyjq/gk=
+	build	-buildmode=exe
+	build	-compiler=gc
+	build	-tags=fips140v1.0
+	build	-trimpath=true
+	build	DefaultGODEBUG=containermaxprocs=0,decoratemappings=0,fips140=on,tlssha1=1,updatemaxprocs=0,x509sha256skid=0
+	build	CGO_ENABLED=0
+	build	GOARCH=amd64
+	build	GOFIPS140=v1.0.0-c2097c7c
+	build	GOOS=linux
+	build	GOAMD64=v1
+

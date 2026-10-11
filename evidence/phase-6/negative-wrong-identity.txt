@@ -1,0 +1,10 @@
+=== client: holds a valid SVID, is refused ===
+2026/10/11 20:24:05 FIPS 140-3 mode: true
+2026/10/11 20:24:09 own identity: spiffe://spire-rmf.lab/ns/payments/sa/fips-wrong-identity
+2026/10/11 20:24:09 expecting server: spiffe://spire-rmf.lab/ns/payments/sa/fips-echo-server
+2026/10/11 20:24:09 DENIED or unreachable: Get "https://fips-echo-server.payments.svc.cluster.local:8443/": remote error: tls: bad certificate
+2026/10/11 20:25:10 DENIED or unreachable: Get "https://fips-echo-server.payments.svc.cluster.local:8443/": remote error: tls: bad certificate
+
+=== server: names the identity it rejected ===
+2026/10/11 20:24:09 http: TLS handshake error from 10.42.1.210:56042: unexpected ID "spiffe://spire-rmf.lab/ns/payments/sa/fips-wrong-identity"
+2026/10/11 20:25:10 http: TLS handshake error from 10.42.1.210:44766: unexpected ID "spiffe://spire-rmf.lab/ns/payments/sa/fips-wrong-identity"

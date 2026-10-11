@@ -1,0 +1,73 @@
+# Phase 6: the wrong-identity negative test.
+#
+# This is the test Phase 3 never ran. The Phase 3 rogue client failed because
+# it had NO certificate: SDS refused to issue one, so the connection failed
+# before a handshake was attempted. That proves credentials are required. It
+# does not prove the authorisation decision turns on identity.
+#
+# This client holds a VALID SVID from the same trust domain. It is selected by
+# the fips-echo-client ClusterSPIFFEID through its pod label, but it runs under
+# a different service account, so its SPIFFE ID is
+# .../sa/fips-wrong-identity rather than .../sa/fips-echo-client.
+#
+# Expected: the TLS handshake is ATTEMPTED and fails on certificate
+# verification, because the server's AuthorizeID does not match. The failure
+# mode is different from the Phase 3 case and that difference is the point.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: fips-wrong-identity
+  namespace: payments
+---
+apiVersion: spire.spiffe.io/v1alpha1
+kind: ClusterSPIFFEID
+metadata:
+  name: fips-wrong-identity
+spec:
+  className: spire-server-spire
+  spiffeIDTemplate: "spiffe://{{ .TrustDomain }}/ns/{{ .PodMeta.Namespace }}/sa/{{ .PodSpec.ServiceAccountName }}"
+  namespaceSelector:
+    matchLabels:
+      spiffe.io/spiffe-id: "true"
+  podSelector:
+    matchLabels:
+      app: fips-wrong-identity
+  ttl: 1h
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fips-wrong-identity
+  namespace: payments
+  labels:
+    app: fips-wrong-identity
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fips-wrong-identity
+  template:
+    metadata:
+      labels:
+        app: fips-wrong-identity
+    spec:
+      serviceAccountName: fips-wrong-identity
+      containers:
+        - name: client
+          image: 401352756244.dkr.ecr.us-east-1.amazonaws.com/fips/echo-client:v1
+          env:
+            - name: AUTHORIZED_SERVER_ID
+              value: "spiffe://spire-rmf.lab/ns/payments/sa/fips-echo-server"
+            - name: TARGET_URL
+              value: "https://fips-echo-server.payments.svc.cluster.local:8443/"
+            - name: REQUEST_INTERVAL
+              value: "60s"
+          volumeMounts:
+            - name: spiffe-workload-api
+              mountPath: /spiffe-workload-api
+              readOnly: true
+      volumes:
+        - name: spiffe-workload-api
+          csi:
+            driver: csi.spiffe.io
+            readOnly: true

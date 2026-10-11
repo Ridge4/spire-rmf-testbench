@@ -1,0 +1,46 @@
+# Phase 6: identities for the FIPS workloads.
+#
+# Separate from the Phase 3 Envoy pair, so both can run side by side and the
+# handshakes can be compared directly: same SPIRE, same trust domain, same
+# issuance path, different cryptographic module performing the TLS.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: fips-echo-server
+  namespace: payments
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: fips-echo-client
+  namespace: payments
+---
+apiVersion: spire.spiffe.io/v1alpha1
+kind: ClusterSPIFFEID
+metadata:
+  name: fips-echo-server
+spec:
+  className: spire-server-spire
+  spiffeIDTemplate: "spiffe://{{ .TrustDomain }}/ns/{{ .PodMeta.Namespace }}/sa/{{ .PodSpec.ServiceAccountName }}"
+  namespaceSelector:
+    matchLabels:
+      spiffe.io/spiffe-id: "true"
+  podSelector:
+    matchLabels:
+      app: fips-echo-server
+  ttl: 1h
+---
+apiVersion: spire.spiffe.io/v1alpha1
+kind: ClusterSPIFFEID
+metadata:
+  name: fips-echo-client
+spec:
+  className: spire-server-spire
+  spiffeIDTemplate: "spiffe://{{ .TrustDomain }}/ns/{{ .PodMeta.Namespace }}/sa/{{ .PodSpec.ServiceAccountName }}"
+  namespaceSelector:
+    matchLabels:
+      spiffe.io/spiffe-id: "true"
+  podSelector:
+    matchLabels:
+      app: fips-echo-client
+  ttl: 1h
