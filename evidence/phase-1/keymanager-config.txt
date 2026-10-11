@@ -2,6 +2,8 @@
           {
             "aws_kms": {
               "plugin_data": {
-                "key_identifier_value": "spire-cluster",
-                "region": "us-east-1"
-              }
+                "enable_tag_based_key_discovery": true,
+                "key_identifier_value": "spire-cluster-v3",
+                "key_policy_file": "/run/spire/data/aws-kms-key-policy.json",
+                "key_tags": {
+                  "Cluster": "spire-cluster",

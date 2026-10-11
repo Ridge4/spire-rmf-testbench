@@ -1,13 +1,12 @@
 rpc error: code = PermissionDenied desc = no identity issued
 rpc error: code = PermissionDenied desc = no identity issued
 rpc error: code = PermissionDenied desc = no identity issued
-Received 1 svid after 6.53086696s
+rpc error: code = PermissionDenied desc = no identity issued
+Received 1 svid after 15.561765352s
 
 SPIFFE ID:		spiffe://spire-rmf.lab/ns/payments/sa/api
-SVID Valid After:	2026-10-10 23:28:05 +0000 UTC
-SVID Valid Until:	2026-10-11 00:28:15 +0000 UTC
-CA #1 Valid After:	2026-10-10 20:29:17 +0000 UTC
-CA #1 Valid Until:	2026-10-11 20:29:27 +0000 UTC
-CA #2 Valid After:	2026-10-10 23:00:15 +0000 UTC
-CA #2 Valid Until:	2026-10-11 23:00:25 +0000 UTC
+SVID Valid After:	2026-10-11 15:17:02 +0000 UTC
+SVID Valid Until:	2026-10-11 16:17:12 +0000 UTC
+CA #1 Valid After:	2026-10-11 14:34:13 +0000 UTC
+CA #1 Valid Until:	2026-10-12 14:34:23 +0000 UTC
 

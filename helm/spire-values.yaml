@@ -43,6 +43,22 @@ spire-server:
     registry: 401352756244.dkr.ecr.us-east-1.amazonaws.com
     repository: spiffe/spire-server
 
+  # --- Identity provenance: the CA subject -----------------------------------
+  #
+  # The chart defaults are commonName example.org, organization Example,
+  # country ARPA. Changing the trust domain alone does not change these, so
+  # every issued certificate carries a subject DN naming example.org regardless
+  # of the trust domain. An assessor reading an actual certificate sees that
+  # subject, which is the point at which identity provenance is most likely to
+  # be checked.
+  #
+  # The chart expects plain strings here, not lists; the template builds the
+  # list itself.
+  caSubject:
+    commonName: spire-rmf.lab
+    country: US
+    organization: spire-rmf-testbench
+
   # --- AU-2 / AU-3: structured audit logging ---------------------------------
   #
   # Separate from the operational log. SPIRE emits a structured record per API

@@ -1,0 +1,37 @@
+FIPS posture check
+Generated: Sun Oct 11 14:51:09 UTC 2026
+
+Reference points, confirm status at csrc.nist.gov before citing:
+  Go Cryptographic Module v1.0.0  CMVP #5247  FIPS 140-3 Level 1
+  BoringSSL-FIPS                  FIPS 140-2 only; Historical since 2026-09-21
+
+=== SPIRE control plane ===
+  image: 401352756244.dkr.ecr.us-east-1.amazonaws.com/spiffe/spire-agent:1.15.3
+  image: 401352756244.dkr.ecr.us-east-1.amazonaws.com/spiffe/spire-controller-manager:0.8.0
+  image: 401352756244.dkr.ecr.us-east-1.amazonaws.com/spiffe/spire-server:1.15.3
+
+  Upstream SPIRE images are not built with GOFIPS140. To verify a build
+  yourself, run against the binary:
+    go version -m /opt/spire/bin/spire-server | grep -i gofips140
+  A validated build records:  build  GOFIPS140=v1.0.0
+  and  go tool nm <binary> | grep -c goboringcrypto  returns 0.
+
+=== Envoy data plane ===
+  
+/usr/local/bin/envoy  version: 688c4bbe47f4d05bb8ed268f5172bb026cf03242/1.31.5/Clean/RELEASE/BoringSSL
+
+  Standard build: not a FIPS build of Envoy.
+
+=== AWS endpoints ===
+  interface and gateway endpoints: 15
+  using FIPS service names:        0
+
+  All endpoints are commercial, not FIPS. A FIPS-configured deployment
+  uses the -fips service names (for example
+  com.amazonaws.us-east-1.kms-fips) and, in most federal cases, GovCloud.
+
+=== What this script cannot tell you ===
+  Whether a module has an Active FIPS 140-3 certificate for the exact
+  version deployed. That is a CMVP lookup, done by hand, recorded with the
+  certificate number and the date checked. Nothing observable from inside
+  the cluster substitutes for it.

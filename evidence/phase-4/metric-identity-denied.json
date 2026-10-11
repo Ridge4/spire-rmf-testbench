@@ -1,0 +1,30 @@
+{
+    "Label": "IdentityDenied",
+    "Datapoints": [
+        {
+            "Timestamp": "2026-10-11T09:50:00-05:00",
+            "Sum": 10.0,
+            "Unit": "None"
+        },
+        {
+            "Timestamp": "2026-10-11T09:45:00-05:00",
+            "Sum": 10.0,
+            "Unit": "None"
+        },
+        {
+            "Timestamp": "2026-10-11T09:40:00-05:00",
+            "Sum": 17.0,
+            "Unit": "None"
+        },
+        {
+            "Timestamp": "2026-10-11T09:35:00-05:00",
+            "Sum": 14.0,
+            "Unit": "None"
+        },
+        {
+            "Timestamp": "2026-10-11T09:55:00-05:00",
+            "Sum": 11.0,
+            "Unit": "None"
+        }
+    ]
+}

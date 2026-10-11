@@ -45,7 +45,13 @@ data:
           {
             "aws_kms": {
               "plugin_data": {
-                "key_identifier_value": "spire-cluster",
+                "enable_tag_based_key_discovery": true,
+                "key_identifier_value": "spire-cluster-v3",
+                "key_policy_file": "/run/spire/data/aws-kms-key-policy.json",
+                "key_tags": {
+                  "Cluster": "spire-cluster",
+                  "Component": "spire-server"
+                },
                 "region": "us-east-1"
               }
             }
@@ -75,18 +81,18 @@ data:
         ]
       },
       "server": {
-        "audit_log_enabled": false,
+        "audit_log_enabled": true,
         "bind_address": "0.0.0.0",
         "bind_port": "8081",
         "ca_key_type": "rsa-2048",
         "ca_subject": [
           {
-            "common_name": "example.org",
+            "common_name": "spire-rmf.lab",
             "country": [
-              "ARPA"
+              "US"
             ],
             "organization": [
-              "Example"
+              "spire-rmf-testbench"
             ]
           }
         ],
@@ -110,10 +116,10 @@ metadata:
   annotations:
     meta.helm.sh/release-name: spire
     meta.helm.sh/release-namespace: spire-server
-  creationTimestamp: "2026-10-09T20:12:59Z"
+  creationTimestamp: "2026-10-11T14:34:15Z"
   labels:
     app.kubernetes.io/managed-by: Helm
   name: spire-server
   namespace: spire-server
-  resourceVersion: "25434"
-  uid: b763499e-564f-4048-bb4c-0dd0daab1156
+  resourceVersion: "11186"
+  uid: e8db95f9-34c1-4d4a-9c77-b3e8ce4311a1

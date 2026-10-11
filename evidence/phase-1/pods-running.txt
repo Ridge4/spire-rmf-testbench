@@ -1,6 +1,6 @@
-NAME                            READY   STATUS    RESTARTS   AGE     IP            NODE                          NOMINATED NODE   READINESS GATES
-spire-agent-z7chx               1/1     Running   0          93s     10.42.2.45    ip-10-42-2-45.ec2.internal    <none>           <none>
-spire-agent-zhz2h               1/1     Running   0          93s     10.42.1.150   ip-10-42-1-150.ec2.internal   <none>           <none>
-spire-server-0                  2/2     Running   0          5m10s   10.42.2.145   ip-10-42-2-45.ec2.internal    <none>           <none>
-spire-spiffe-csi-driver-7vtv4   2/2     Running   0          164m    10.42.2.75    ip-10-42-2-45.ec2.internal    <none>           <none>
-spire-spiffe-csi-driver-n7shj   2/2     Running   0          164m    10.42.1.18    ip-10-42-1-150.ec2.internal   <none>           <none>
+NAME                            READY   STATUS    RESTARTS   AGE    IP            NODE                          NOMINATED NODE   READINESS GATES
+spire-agent-mktl7               1/1     Running   0          44m    10.42.2.124   ip-10-42-2-124.ec2.internal   <none>           <none>
+spire-agent-mmvhm               1/1     Running   0          44m    10.42.1.146   ip-10-42-1-146.ec2.internal   <none>           <none>
+spire-server-0                  2/2     Running   0          2m6s   10.42.2.151   ip-10-42-2-124.ec2.internal   <none>           <none>
+spire-spiffe-csi-driver-864wl   2/2     Running   0          44m    10.42.2.6     ip-10-42-2-124.ec2.internal   <none>           <none>
+spire-spiffe-csi-driver-z9lvx   2/2     Running   0          44m    10.42.1.66    ip-10-42-1-146.ec2.internal   <none>           <none>

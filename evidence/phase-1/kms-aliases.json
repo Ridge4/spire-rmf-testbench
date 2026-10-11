@@ -1,31 +1,24 @@
 [
     {
-        "AliasName": "alias/SPIRE_SERVER/spire-rmf_lab/spire-cluster-v2/JWT-Signer-A",
-        "AliasArn": "arn:aws:kms:us-east-1:401352756244:alias/SPIRE_SERVER/spire-rmf_lab/spire-cluster-v2/JWT-Signer-A",
-        "TargetKeyId": "c6611260-b4ca-4ffc-be24-f9602d7cf909",
-        "CreationDate": "2026-10-10T15:29:27.532000-05:00",
-        "LastUpdatedDate": "2026-10-10T15:29:27.532000-05:00"
-    },
-    {
-        "AliasName": "alias/SPIRE_SERVER/spire-rmf_lab/spire-cluster-v2/x509-CA-A",
-        "AliasArn": "arn:aws:kms:us-east-1:401352756244:alias/SPIRE_SERVER/spire-rmf_lab/spire-cluster-v2/x509-CA-A",
-        "TargetKeyId": "5f34dfb1-72a3-42c1-9196-2c34d42d0fd0",
-        "CreationDate": "2026-10-10T15:29:27.419000-05:00",
-        "LastUpdatedDate": "2026-10-10T15:29:27.419000-05:00"
-    },
-    {
         "AliasName": "alias/SPIRE_SERVER/spire-rmf_lab/spire-cluster-v3/JWT-Signer-A",
         "AliasArn": "arn:aws:kms:us-east-1:401352756244:alias/SPIRE_SERVER/spire-rmf_lab/spire-cluster-v3/JWT-Signer-A",
-        "TargetKeyId": "3331bdb7-6f35-4afd-809a-729f1b99044f",
-        "CreationDate": "2026-10-10T18:00:25.471000-05:00",
-        "LastUpdatedDate": "2026-10-10T18:00:25.471000-05:00"
+        "TargetKeyId": "36d48b4a-63a1-4d66-96c5-7c34acc47039",
+        "CreationDate": "2026-10-11T09:34:23.750000-05:00",
+        "LastUpdatedDate": "2026-10-11T09:34:23.750000-05:00"
     },
     {
         "AliasName": "alias/SPIRE_SERVER/spire-rmf_lab/spire-cluster-v3/x509-CA-A",
         "AliasArn": "arn:aws:kms:us-east-1:401352756244:alias/SPIRE_SERVER/spire-rmf_lab/spire-cluster-v3/x509-CA-A",
-        "TargetKeyId": "f5785a64-eb64-4b29-8fa8-6d63e1de3b0f",
-        "CreationDate": "2026-10-10T18:00:25.329000-05:00",
-        "LastUpdatedDate": "2026-10-10T18:00:25.329000-05:00"
+        "TargetKeyId": "0952a72b-32c7-4a6f-a529-f043d0b34280",
+        "CreationDate": "2026-10-11T09:34:23.610000-05:00",
+        "LastUpdatedDate": "2026-10-11T09:34:23.610000-05:00"
+    },
+    {
+        "AliasName": "alias/SPIRE_SERVER/spire-rmf_lab/spire-cluster-v3/x509-CA-B",
+        "AliasArn": "arn:aws:kms:us-east-1:401352756244:alias/SPIRE_SERVER/spire-rmf_lab/spire-cluster-v3/x509-CA-B",
+        "TargetKeyId": "ef235ca9-067e-4dc7-bccc-e3a3ee3e053d",
+        "CreationDate": "2026-10-11T10:22:06.018000-05:00",
+        "LastUpdatedDate": "2026-10-11T10:22:06.018000-05:00"
     },
     {
         "AliasName": "alias/SPIRE_SERVER/spire-rmf_lab/spire-cluster/JWT-Signer-A",

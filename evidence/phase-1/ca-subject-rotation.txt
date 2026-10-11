@@ -1,0 +1,47 @@
+=== CA subject before and after, captured Sun Oct 11 15:23:27 UTC 2026 ===
+
+The caSubject values were changed in helm/spire-values.yaml and applied
+at 15:14 UTC. The running CA did not change: it persists in the datastore
+and KMS across server restarts. A new CA carrying the new subject was
+only minted when the authority was rotated.
+
+== /tmp/ca-1.pem
+subject=C = ARPA, O = Example, CN = example.org, serialNumber = 67948097739695387701663575398482936811
+notBefore=Oct 11 14:34:13 2026 GMT
+notAfter=Oct 12 14:34:23 2026 GMT
+
+== /tmp/ca-2.pem
+subject=C = US, O = spire-rmf-testbench, CN = spire-rmf.lab, serialNumber = 156863371054340245812707004456613827863
+notBefore=Oct 11 15:21:56 2026 GMT
+notAfter=Oct 12 15:22:06 2026 GMT
+
+
+=== The leaf subject did not change ===
+
+After rotation, workload SVIDs are issued by the new CA but still carry
+SPIRE's own subject DN:
+
+  MTLS peer=spiffe://spire-rmf.lab/ns/payments/sa/echo-client
+       subject=O=SPIRE,C=US
+
+caSubject sets the issuer DN only. The subject on a workload certificate is
+set by SPIRE and is not configurable through this value. An organisation that
+wants its own name on workload certificates needs the credential composer
+(credentialComposer.cel in the chart), not caSubject.
+
+Three layers, three mechanisms:
+  trust domain  -> global.spire.trustDomain, effective immediately
+  CA subject    -> caSubject, effective only at CA rotation
+  leaf subject  -> SPIRE internal; credential composer required to change
+
+=== The rotation is visible in KMS as well ===
+
+The new authority's signing key was generated in KMS, not locally. After
+rotation, kms-aliases.json contains x509-CA-B alongside x509-CA-A:
+
+  alias/SPIRE_SERVER/spire-rmf_lab/spire-cluster-v3/x509-CA-A
+  alias/SPIRE_SERVER/spire-rmf_lab/spire-cluster-v3/x509-CA-B
+
+Same event recorded independently in the certificate bundle and in KMS. For
+SC-12 this matters: the new CA's private key never existed outside KMS, so the
+rotation did not reintroduce local key material.

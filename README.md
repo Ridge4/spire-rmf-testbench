@@ -17,8 +17,8 @@ to close the evidence gaps that report identified.
 | 1 | External datastore (RDS), KMS-backed keys, enforced TTL, ECR mirror | IA-5, SC-12, CM-7, RA-5 | done |
 | 2 | Purpose-built namespaces, scoped ClusterSPIFFEIDs, negative test | AC-3, AC-6 | done |
 | 3 | Live mTLS via Envoy SDS, identity-based authorisation | SC-8, AC-3 | in progress |
-| 4 | Telemetry to CloudWatch, metric filters, denial alarm | AU-2, AU-3, AU-9 | in progress |
-| 5 | FIPS 140-validated crypto investigation | SC-13 | planned |
+| 4 | Telemetry to CloudWatch, metric filters, denial alarm | AU-2, AU-3, AU-9 | done |
+| 5 | FIPS 140-3 investigation: validated module for SPIRE, gap for Envoy | SC-13 | documented |
 
 ## Layout
 
@@ -32,6 +32,9 @@ manifests/        per-phase Kubernetes resources
 scripts/          operational helpers
   connect.sh        SSM tunnel, kubeconfig, datastore secret
   mirror-images.sh  copy container images into ECR
+  image-inventory.sh      what is actually running, and what is not mirrored
+  fips-check.sh           what cryptography the running binaries link
+  phase0-evidence.sh      boundary evidence, inside and outside the enclave
   pre-destroy-cleanup.sh  orphaned ENIs and SPIRE-created KMS keys
 evidence/         captured artifacts, organized by phase
 docs/             build notes and findings

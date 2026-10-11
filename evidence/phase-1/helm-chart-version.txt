@@ -1,3 +1,3 @@
 NAME      	NAMESPACE   	REVISION	UPDATED                                	STATUS  	CHART           	APP VERSION
-spire     	spire-server	2       	2026-10-09 15:16:42.001090347 -0500 CDT	failed  	spire-0.30.3    	1.15.3     
-spire-crds	spire-server	3       	2026-10-09 14:13:47.222073518 -0500 CDT	deployed	spire-crds-0.6.1	0.0.1      
+spire     	spire-server	2       	2026-10-11 10:14:54.522228462 -0500 CDT	deployed	spire-0.30.3    	1.15.3     
+spire-crds	spire-server	1       	2026-10-11 09:34:10.762270327 -0500 CDT	deployed	spire-crds-0.6.1	0.0.1      
