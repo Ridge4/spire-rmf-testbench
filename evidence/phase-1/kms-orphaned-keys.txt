@@ -1,0 +1,60 @@
+=== KMS keys surviving full teardown, Sun Oct 11 21:05:53 UTC 2026 ===
+
+After terraform destroy removed every other resource, two KMS keys remain.
+They were created on 2026-10-09 under the aws_kms plugin's DEFAULT key
+policy, which grants administration only to the IAM role that created
+them and gives the account root read-only access. Terraform destroyed
+that role, and AWS resolves policy principals to internal IDs rather
+than ARN strings, so recreating a role with the same ARN does not
+restore access.
+
+These keys cannot be deleted, disabled, or repolicied by any principal
+in the account. AWS Support is the only remaining route.
+
+[
+    {
+        "AliasName": "alias/SPIRE_SERVER/spire-rmf_lab/spire-cluster/JWT-Signer-A",
+        "AliasArn": "arn:aws:kms:us-east-1:401352756244:alias/SPIRE_SERVER/spire-rmf_lab/spire-cluster/JWT-Signer-A",
+        "TargetKeyId": "97bb7abc-b3d3-441b-9b04-dcb037cef939",
+        "CreationDate": "2026-10-09T15:16:49.429000-05:00",
+        "LastUpdatedDate": "2026-10-09T15:16:49.429000-05:00"
+    },
+    {
+        "AliasName": "alias/SPIRE_SERVER/spire-rmf_lab/spire-cluster/x509-CA-A",
+        "AliasArn": "arn:aws:kms:us-east-1:401352756244:alias/SPIRE_SERVER/spire-rmf_lab/spire-cluster/x509-CA-A",
+        "TargetKeyId": "928e84df-9901-4438-9fcf-89e4169b67cf",
+        "CreationDate": "2026-10-09T15:16:49.297000-05:00",
+        "LastUpdatedDate": "2026-10-09T15:16:49.297000-05:00"
+    }
+]
+
+Attempting deletion as the account's Terraform principal:
+  alias/SPIRE_SERVER/spire-rmf_lab/spire-cluster/JWT-Signer-A
+    
+    An error occurred (AccessDeniedException) when calling the DeleteAlias operation: User: arn:aws:iam::401352756244:user/spire-terraform-agent is not authorized to perform: kms:DeleteAlias on resource: arn:aws:kms:us-east-1:401352756244:key/97bb7abc-b3d3-441b-9b04-dcb037cef939 because no resource-based policy allows the kms:DeleteAlias action
+  alias/SPIRE_SERVER/spire-rmf_lab/spire-cluster/x509-CA-A
+    
+    An error occurred (AccessDeniedException) when calling the DeleteAlias operation: User: arn:aws:iam::401352756244:user/spire-terraform-agent is not authorized to perform: kms:DeleteAlias on resource: arn:aws:kms:us-east-1:401352756244:key/928e84df-9901-4438-9fcf-89e4169b67cf because no resource-based policy allows the kms:DeleteAlias action
+
+=== The account root is also denied ===
+
+Attempting to disable these keys from the AWS console, as the account root,
+returned:
+
+  AccessDeniedException - User: arn:aws:iam::401352756244:root is not
+  authorized to perform: kms:DisableKey on resource:
+  arn:aws:kms:us-east-1:401352756244:key/928e84df-9901-4438-9fcf-89e4169b67cf
+  because no resource-based policy allows the kms:DisableKey action
+
+This is the part worth stating carefully. AWS's usual guarantee is that the
+account root retains control of its own keys. That guarantee holds only if the
+key policy grants it. The aws_kms plugin's default policy gives root
+kms:Describe*, kms:List* and kms:Get* and nothing more, so root can see these
+keys and cannot act on them.
+
+Control implication, CP-10. Rebuilding from infrastructure as code is supposed
+to be a recovery capability. With the plugin's default key policy, the rebuild
+destroys the trust anchor rather than restoring it, and the destruction is
+irreversible. The mitigation is an explicit key policy granting the account
+root full administrative access, as in helm/spire-values.yaml from Phase 1
+onward.

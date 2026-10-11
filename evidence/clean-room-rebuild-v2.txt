@@ -1,0 +1,32 @@
+=== Clean-room rebuild from zero, Sun Oct 11 21:48:13 UTC 2026 ===
+Account emptied first: no VPC, no RDS, no ECR repositories, no Terraform state.
+Rebuilt following only README.md, steps 1-8.
+
+--- scoped identity (AC-6) ---
+rpc error: code = PermissionDenied desc = no identity issued
+rpc error: code = PermissionDenied desc = no identity issued
+Received 1 svid after 6.526676392s
+
+SPIFFE ID:		spiffe://spire-rmf.lab/ns/payments/sa/api
+SVID Valid After:	2026-10-11 21:45:49 +0000 UTC
+SVID Valid Until:	2026-10-11 22:45:59 +0000 UTC
+CA #1 Valid After:	2026-10-11 21:44:20 +0000 UTC
+CA #1 Valid Until:	2026-10-12 21:44:30 +0000 UTC
+
+--- unmatched workload denied ---
+rpc error: code = PermissionDenied desc = no identity issued
+rpc error: code = PermissionDenied desc = no identity issued
+rpc error: code = PermissionDenied desc = no identity issued
+--- Envoy mTLS (SC-8) ---
+MTLS peer=spiffe://spire-rmf.lab/ns/payments/sa/echo-client tls_version=TLSv1.2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 subject=O=SPIRE,C=US response=200
+--- FIPS 140-3 mTLS (SC-13) ---
+2026/10/11 21:47:11 MTLS peer=spiffe://spire-rmf.lab/ns/payments/sa/fips-echo-client tls_version=TLS 1.3 cipher=TLS_AES_128_GCM_SHA256 fips=true
+2026/10/11 21:48:11 MTLS peer=spiffe://spire-rmf.lab/ns/payments/sa/fips-echo-client tls_version=TLS 1.3 cipher=TLS_AES_128_GCM_SHA256 fips=true
+--- valid SVID, unauthorised identity, refused (AC-3) ---
+2026/10/11 21:46:11 DENIED or unreachable: Get "https://fips-echo-server.payments.svc.cluster.local:8443/": remote error: tls: bad certificate
+2026/10/11 21:47:11 DENIED or unreachable: Get "https://fips-echo-server.payments.svc.cluster.local:8443/": remote error: tls: bad certificate
+2026/10/11 21:48:11 DENIED or unreachable: Get "https://fips-echo-server.payments.svc.cluster.local:8443/": remote error: tls: bad certificate
+--- supply chain ---
+=== External registries (0) ===
+  none: nothing running depends on a registry outside AWS
+
