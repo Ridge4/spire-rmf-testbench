@@ -9,9 +9,7 @@ type: software
 authors:
   - given-names: Samuel
     family-names: Howard
-    # Add an ORCID if you have one; it links this archive to the report and to
-    # anything you publish later. Free at orcid.org.
-    # orcid: 'https://orcid.org/0000-0000-0000-0000'
+orcid: 'https://orcid.org/0009-0007-4100-2829'
 repository-code: 'https://github.com/Ridge4/spire-rmf-testbench'
 abstract: >-
   Infrastructure-as-code and evidence artifacts for a SPIFFE/SPIRE
